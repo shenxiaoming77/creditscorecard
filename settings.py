@@ -1,11 +1,11 @@
-ROOT_DIR = 'E:/conf_test/creditscored/'
+ROOT_DIR = 'D:/conf_test/creditscored/'
 FE_DIR = ROOT_DIR + 'featureEngineering/'  #featureEngineering_dir
 
 
 NUM_BINS = 5
 
 
-numericalFeatures = ['user_age','zhima_score','network_len','auth_level','company_college_length','br_score',
+numericalFeatures = ['user_age','zhima_score','auth_level','company_college_length','br_score',
                 'm1_verif_count','m1_register_count','m1_apply_request_count','m1_apply_reject_count',
                 'm1_loan_offer_count','m1_repay_fail_count','m1_overdue_count','m1_repay_remind_count',
                 'm3_verif_count','m3_register_count','m3_apply_request_count','m3_apply_reject_count',
@@ -18,7 +18,8 @@ numericalFeatures = ['user_age','zhima_score','network_len','auth_level','compan
 #类别型变量
 categoricalFeatures = ['gender','job_level','phone_province','phone_city','identity_province','identity_city',
                 'is_identical_phone_identity_province',
-                'occupation','registerDate_xunYue','applyDate_xunYue','registerDate_hour','applyDate_hour'
+                'occupation','registerDate_xunYue','applyDate_xunYue','registerDate_hour','applyDate_hour',
+                'network_len'
                 ]
 
 LABEL = 'loan_status'

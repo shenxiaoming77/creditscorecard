@@ -38,7 +38,7 @@ def  null_counts_visualization():
 
     x_label='features'
     y_label= 'NAN Count Num'
-    title='NAN Count for Features'
+    title='特征空值数量统计'
     plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
     plt.title(title)
     plt.xticks(range(len(x) + 1), x)
@@ -49,6 +49,13 @@ def  null_counts_visualization():
     plt.show()
 
 #查看某一个特征的值分布情况
+'''
+NAN
+    ~ 500
+500 ~ 550
+550 ~ 600
+600 ~
+'''
 def feature_distribution_visualization(var):
     values = list(df.groupby(var)[var].count())
     keys = list(dict(list(df.groupby(var)[var])).keys())
@@ -64,4 +71,4 @@ def feature_distribution_visualization(var):
 
 #null_counts_visualization()
 
-feature_distribution_visualization(var = 'br_score')
+#feature_distribution_visualization(var = 'br_score')

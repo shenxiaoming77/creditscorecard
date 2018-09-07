@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/creditscored_dev.iml" filepath="$PROJECT_DIR$/.idea/creditscored_dev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../RistCreditControl/.idea/CreditRistControl.iml" filepath="$PROJECT_DIR$/../RistCreditControl/.idea/CreditRistControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/creditscorecard.iml" filepath="$PROJECT_DIR$/.idea/creditscorecard.iml" />
     </modules>
   </component>
 </project>
+
