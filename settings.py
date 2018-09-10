@@ -1,6 +1,6 @@
 #coding=utf-8
 
-ROOT_DIR = 'D:/conf_test/creditscored/'
+ROOT_DIR = 'E:/conf_test/creditscored/'
 FE_DIR = ROOT_DIR + 'featureEngineering/'  #featureEngineering_dir
 
 
@@ -18,10 +18,11 @@ numericalFeatures = ['user_age','zhima_score','auth_level','company_college_leng
                 'm12_loan_offer_count','m12_repay_fail_count','m12_overdue_count','m12_repay_remind_count'
                 ]
 #类别型变量
-categoricalFeatures = ['gender','job_level','phone_province','phone_city','identity_province','identity_city',
+categoricalFeatures = ['gender','job_level','phone_province','phone_city',
+                       'identity_province','identity_city',
                 'is_identical_phone_identity_province',
-                'occupation','registerDate_xunYue','applyDate_xunYue','registerDate_hour','applyDate_hour',
-                'network_len'
+                'occupation','registerDate_xunYue','applyDate_xunYue','registerDate_hour',
+                       'applyDate_hour','network_len'
                 ]
 
 LABEL = 'loan_status'

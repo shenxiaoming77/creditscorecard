@@ -185,6 +185,9 @@ def phone_city_analysis():
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
+    plt.savefig('./visualization_pics/phone_city_badrate.png')
+    plt.show()
+
 def identity_city_analysis():
     identity_city_df = user_info_df['identity_city'].fillna('null')
     city_classification_dict = {}
@@ -209,7 +212,7 @@ def identity_city_analysis():
     #升序排列
     sorted_dict = sorted(badrate_dict.items(), key = lambda  d : d[1], reverse = False)
 
-    with open(ROOT_DIR + 'dataExploration/identity_city_badrate.pkl', 'wb') as file:
+    with open(ROOT_DIR + 'dataExploration/identity_city_classification_badrate.pkl', 'wb') as file:
         pickle.dump(sorted_dict, file)
 
     x = []
@@ -227,6 +230,9 @@ def identity_city_analysis():
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
+    plt.savefig('./visualization_pics/identity_city_classification_badrate.png')
+    plt.show()
+
 
 def message_feature_analysis():
     messageFeature_list = ['m1_verif_count','m1_register_count','m1_apply_request_count','m1_apply_reject_count',
@@ -239,7 +245,47 @@ def message_feature_analysis():
                 'm12_loan_offer_count','m12_repay_fail_count','m12_overdue_count','m12_repay_remind_count'
                 ]
 
+def network_len_analysis():
+    network_len_df = user_info_df[['network_len', 'loan_status']]
+    network_len_df.fillna('null', inplace=True)
+    network_len_df['network_len'] = network_len_df['network_len'].apply(lambda x : str(x).replace('未查得', 'null'))
+    print(network_len_df['network_len'])
 
+    groupby_data = network_len_df.groupby('network_len')[LABEL]
+    bin_count = groupby_data.count()
+    bin_badstatus_sum = groupby_data.sum()
+
+    count_list = list(bin_count)
+    sum_list = list(bin_badstatus_sum)
+    keys = list(dict(list(groupby_data)).keys())
+
+    badrate_dict = {}
+    for i in range(len(keys)):
+        badrate_dict[keys[i]] = (sum_list[i] * 1.0) / count_list[i]
+
+    sorted_dict = sorted(badrate_dict.items(), key = lambda  x : x[1], reverse = False)
+
+    with open(ROOT_DIR + 'dataExploration/network_len_badrate.pkl', 'wb') as file:
+        pickle.dump(sorted_dict, file)
+
+    x = []
+    y = []
+    for item in sorted_dict:
+        x.append(item[0])
+        y.append(item[1])
+
+    x_label = 'network len year'
+    y_label = 'badrate'
+
+    title='入网时间不同区间的整体坏账率'
+    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.title(title)
+    plt.xticks(range(len(x) + 1), x)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+
+    plt.savefig('./visualization_pics/network_len_badrate.png')
+    plt.show()
 
 
 if __name__ == '__main__':
@@ -251,3 +297,5 @@ if __name__ == '__main__':
     # identity_city_analysis()
 
     message_feature_analysis()
+
+    #network_len_analysis()
