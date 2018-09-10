@@ -4,32 +4,37 @@
 
 from  settings import  *
 import  pickle
+import  pandas as pd
 
-city_level_dict = {}
-for i in city_00:
-    city_level_dict[i] = '一线'
+df1 = pd.read_excel(ROOT_DIR + 'settings/1.xls', encoding='gbk')
 
-for i in city_01:
-    city_level_dict[i] = '新一线'
 
-for i in city_02:
-    city_level_dict[i] = '二线'
+df2 = pd.read_excel(ROOT_DIR + 'settings/2.xls', encoding='gbk')
 
-for i in city_03:
-    city_level_dict[i] = '三线'
 
-for i in city_04:
-    city_level_dict[i] = '四线'
+df3 = pd.read_excel(ROOT_DIR + 'settings/3.xls', encoding='gbk')
 
-for i in city_05:
-    city_level_dict[i] = '五线'
 
-print(city_level_dict)
+df4 = pd.read_excel(ROOT_DIR + 'settings/4.xls', encoding='gbk')
 
-with open(ROOT_DIR + 'city_level.pkl', 'wb') as file1:
-    pickle.dump(city_level_dict, file1)
 
-with open(ROOT_DIR + 'city_level.pkl', 'rb') as file2:
-    city_dict = pickle.load(file2)
+df5 = pd.read_excel(ROOT_DIR + 'settings/5.xls', encoding='gbk')
+
+df6 = pd.read_excel(ROOT_DIR + 'settings/6.xls', encoding='gbk')
+
+city_dict = {}
+city_dict['一线'] = list(df1['一线'])
+city_dict['新一线'] = list(df2['新一线'])
+city_dict['二线'] = list(df3['二线'])
+city_dict['三线'] = list(df4['三线'])
+city_dict['四线'] = list(df5['四线'])
+city_dict['五线'] = list(df6['五线'])
 
 print(city_dict)
+
+with open(ROOT_DIR + 'settings/city_classification.pkl', 'wb') as file:
+    pickle.dump(city_dict, file)
+
+with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as file:
+    city_dict = pickle.load(file)
+    print(city_dict)

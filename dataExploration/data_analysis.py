@@ -7,6 +7,8 @@ import  pickle
 
 from  settings import  *
 
+from  util.featureEngineering_functions import assign_city_level_bin
+
 user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 
 
@@ -83,7 +85,7 @@ def phone_province_analysis():
     #升序排列
     sorted_dict = sorted(badrate_dict.items(), key = lambda  d : d[1], reverse = True)
 
-    with open(ROOT_DIR + 'phone_province_badrate.pkl', 'wb') as file:
+    with open(ROOT_DIR + 'dataExploration/phone_province_badrate.pkl', 'wb') as file:
         pickle.dump(sorted_dict, file)
 
     x = []
@@ -109,7 +111,6 @@ def identity_province_analysis():
     groupby_count = identity_province_groupby.count()
     groupby_sum = identity_province_groupby.sum()
 
-    badrates = []
 
     count_list = list(groupby_count)
     sum_list = list(groupby_sum)
@@ -123,7 +124,7 @@ def identity_province_analysis():
     #升序排列
     sorted_dict = sorted(badrate_dict.items(), key = lambda  d : d[1], reverse = False)
 
-    with open(ROOT_DIR + 'identity_province_badrate.pkl', 'wb') as file:
+    with open(ROOT_DIR + 'dataExploration/identity_province_badrate.pkl', 'wb') as file:
         pickle.dump(sorted_dict, file)
 
     x = []
@@ -145,8 +146,108 @@ def identity_province_analysis():
 
 def phone_city_analysis():
     phone_city_df = user_info_df['phone_city'].fillna('null')
-    phone_city_df['phone_city_bin'] = phone_city_df.apply()
+    city_classification_dict = {}
+    with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as  file:
+        city_classification_dict = pickle.load(file)
+    phone_city_df['phone_city_bin'] = phone_city_df.apply(lambda  x : assign_city_level_bin(x, city_classification_dict))
+    print(phone_city_df['phone_city_bin'])
+    phone_city_df['loan_status'] = user_info_df['loan_status']
 
-null_counts_analysis()
-phone_province_analysis()
-identity_province_analysis()
+    phone_city_groupby = phone_city_df.groupby('phone_city_bin')[LABEL]
+    bin_count = phone_city_groupby.count()
+    bin_badstatus_sum = phone_city_groupby.sum()
+
+    count_list = list(bin_count)
+    sum_list = list(bin_badstatus_sum)
+    keys = list(dict(list(phone_city_groupby)).keys())
+
+    badrate_dict = {}
+    for i in range(len(keys)):
+        badrate_dict[keys[i]] = (sum_list[i] * 1.0) / count_list[i]
+
+    sorted_dict = sorted(badrate_dict.items(), key = lambda  d : d[1], reverse = False)
+
+    with open(ROOT_DIR + 'dataExploration/phone_city_badrate.pkl', 'wb') as file:
+        pickle.dump(sorted_dict, file)
+
+    x = []
+    y = []
+    for item in sorted_dict:
+        x.append(item[0])
+        y.append(item[1])
+
+    x_label='phone city level'
+    y_label= 'badrate'
+    title='号码归属地城市等级的整体坏账率'
+    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.title(title)
+    plt.xticks(range(len(x) + 1), x)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+
+def identity_city_analysis():
+    identity_city_df = user_info_df['identity_city'].fillna('null')
+    city_classification_dict = {}
+    with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as  file:
+        city_classification_dict = pickle.load(file)
+    identity_city_df['identity_city_bin'] = identity_city_df.apply(lambda  x : assign_city_level_bin(x, city_classification_dict))
+    print(identity_city_df['identity_city_bin'])
+    identity_city_df['loan_status'] = user_info_df['loan_status']
+
+    identity_city_groupby = identity_city_df.groupby('identity_city_bin')[LABEL]
+    bin_count = identity_city_groupby.count()   #每个bin的样本数量
+    bin_badstatus_sum = identity_city_groupby.sum()   #每个bin的坏样本数量
+
+    count_list = list(bin_count)
+    sum_list = list(bin_badstatus_sum)
+    keys = list(dict(list(identity_city_groupby)).keys())
+
+    badrate_dict = {}
+    for i in range(len(keys)):
+        badrate_dict[keys[i]] = (sum_list[i] * 1.0) / count_list[i]
+
+    #升序排列
+    sorted_dict = sorted(badrate_dict.items(), key = lambda  d : d[1], reverse = False)
+
+    with open(ROOT_DIR + 'dataExploration/identity_city_badrate.pkl', 'wb') as file:
+        pickle.dump(sorted_dict, file)
+
+    x = []
+    y = []
+    for item in sorted_dict:
+        x.append(item[0])
+        y.append(item[1])
+
+    x_label='identity city classification'
+    y_label= 'badrate'
+    title='户籍所在城市等级的整体坏账率'
+    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.title(title)
+    plt.xticks(range(len(x) + 1), x)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+
+
+def message_feature_analysis():
+    messageFeature_list = ['m1_verif_count','m1_register_count','m1_apply_request_count','m1_apply_reject_count',
+                'm1_loan_offer_count','m1_repay_fail_count','m1_overdue_count','m1_repay_remind_count',
+                'm3_verif_count','m3_register_count','m3_apply_request_count','m3_apply_reject_count',
+                'm3_loan_offer_count','m3_repay_fail_count','m3_overdue_count','m3_repay_remind_count',
+                'm6_verif_count','m6_register_count','m6_apply_request_count','m6_apply_reject_count',
+                'm6_loan_offer_count','m6_repay_fail_count','m6_overdue_count','m6_repay_remind_count',
+                'm12_verif_count','m12_register_count','m12_apply_request_count','m12_apply_reject_count',
+                'm12_loan_offer_count','m12_repay_fail_count','m12_overdue_count','m12_repay_remind_count'
+                ]
+
+
+
+
+if __name__ == '__main__':
+    # null_counts_analysis()
+    # phone_province_analysis()
+    # identity_province_analysis()
+
+    # phone_city_analysis()
+    # identity_city_analysis()
+
+    message_feature_analysis()
