@@ -4,6 +4,7 @@ import  pandas as pd
 import  numpy as np
 import  matplotlib.pyplot as plt
 import  pickle
+import  seaborn as sns
 
 from  settings import  *
 
@@ -13,7 +14,7 @@ user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 
 
 #所有原始特征的空值情况统计
-def  null_counts_analysis():
+def null_counts_analysis():
     null_count_dict = {}
     total = len(user_info_df['job_level'])
     features_list = numericalFeatures + categoricalFeatures
@@ -34,12 +35,16 @@ def  null_counts_analysis():
         y.append(item[1] * 1.0 / total)
         i += 1
 
+    print(x)
+    print(y)
+
     x_label='features'
     y_label= 'NAN Count Num'
     title='特征空值数量统计'
-    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.xticks(np.arange(len(x)), x)
+    plt.bar(np.arange(len(x)), y, width = 0.35, facecolor = 'yellowgreen')
     plt.title(title)
-    plt.xticks(range(len(x) + 1), x)
+
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
@@ -49,7 +54,7 @@ def  null_counts_analysis():
 #分析芝麻分与其他连续变量的相关性，根据强相关特征来进行用户分群，从而对同组用户进行芝麻分的缺失填补
 def zhima_score_analysis():
 
-    df = user_info_df[numericalFeatures].fillna(-1)
+    user_info_df.fillna(-1, inplace = True)
     numerical_data = user_info_df[numericalFeatures]
 
     x = 'zhima_score'
@@ -58,16 +63,62 @@ def zhima_score_analysis():
     '''
     zhima_score与auth_level, company_college_length 这两个连续变量关联度较高
     '''
+    corrcoef_dict = {}
     for y in numericalFeatures:
         print(y)
         if x != y:
             y_data = numerical_data[y].astype('int')
             print(x, '      ', y, '     ', np.corrcoef(x_data, y_data)[0, 1])
+            corrcoef_value = np.corrcoef(x_data, y_data)[0, 1]
+            if corrcoef_value >= 0.1:
+                corrcoef_dict[y] = corrcoef_value
+
+    sorted_corrcoef_dict = sorted(corrcoef_dict.items(), key = lambda d : d[1], reverse = True)
+    print(sorted_corrcoef_dict)
+
+    features = []
+    for item in sorted_corrcoef_dict:
+        features.append(item[0])
+        print(item[0])
+
+    features_df = pd.DataFrame()
+    features_df['feature'] = features
+    features_df.to_excel(ROOT_DIR + 'featureEngineering/zhima_correlation_features.xlsx', index=None)
+
+
+
+#原始连续特征之间的相关性热力图分析
+def origin_numericalFeature_correlation_analysis():
+    numerical_df = user_info_df[numericalFeatures]
+    numerical_df.fillna(-1, inplace = True)
+
+    corr_mat = numerical_df.corr()
+
+    sns.set()
+    f, ax = plt.subplots(figsize=(9, 10))
+
+    #使用不同的颜色
+    sns.heatmap(corr_mat, fmt="d",cmap='YlGnBu', ax=ax)
+
+    ax.set_title('correlations analysis for numerical features')
+
+
+    #设置坐标字体方向
+    label_y = ax.get_yticklabels()
+    plt.setp(label_y, rotation=360, horizontalalignment='right')
+    label_x = ax.get_xticklabels()
+    plt.setp(label_x, rotation=45, horizontalalignment='right')
+
+
+
+    plt.savefig('./visualization_pics/correlations_analysis_numericalFeatures.png')
+    plt.show()
 
 
 def phone_province_analysis():
-    df = user_info_df[categoricalFeatures].fillna('null', inplace = True)
-    phone_province_groupby = df.groupby('phone_province')[LABEL]
+    user_info_df['phone_province'].fillna('null', inplace = True)
+
+    phone_province_groupby = user_info_df.groupby('phone_province')[LABEL]
     groupby_count = phone_province_groupby.count()
     groupby_sum = phone_province_groupby.sum()
 
@@ -96,9 +147,9 @@ def phone_province_analysis():
     x_label='phone province'
     y_label= 'badrate'
     title='手机号所在省份的整体坏账率'
-    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.bar(np.arange(len(x)), y, width = 0.35, facecolor = 'yellowgreen')
     plt.title(title)
-    plt.xticks(range(len(x) + 1), x)
+    plt.xticks(np.arange(len(x)), x)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
@@ -106,8 +157,9 @@ def phone_province_analysis():
     plt.show()
 
 def identity_province_analysis():
-    df = user_info_df[categoricalFeatures].fillna('null')
-    identity_province_groupby = df.groupby('identity_province')[LABEL]
+    user_info_df['identity_province'].fillna('null', inplace = True)
+
+    identity_province_groupby = user_info_df.groupby('identity_province')[LABEL]
     groupby_count = identity_province_groupby.count()
     groupby_sum = identity_province_groupby.sum()
 
@@ -135,9 +187,9 @@ def identity_province_analysis():
     x_label='identity province'
     y_label= 'badrate'
     title='户籍所在省份的整体坏账率'
-    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.bar(np.arange(len(x)), y, width = 0.35, facecolor = 'yellowgreen')
     plt.title(title)
-    plt.xticks(range(len(x) + 1), x)
+    plt.xticks(np.arange(len(x)), x)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
@@ -145,15 +197,13 @@ def identity_province_analysis():
     plt.show()
 
 def phone_city_analysis():
-    phone_city_df = user_info_df['phone_city'].fillna('null')
+    user_info_df['phone_city'].fillna('null', inplace = True)
     city_classification_dict = {}
     with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as  file:
         city_classification_dict = pickle.load(file)
-    phone_city_df['phone_city_bin'] = phone_city_df.apply(lambda  x : assign_city_level_bin(x, city_classification_dict))
-    print(phone_city_df['phone_city_bin'])
-    phone_city_df['loan_status'] = user_info_df['loan_status']
+    user_info_df['phone_city_bin'] = user_info_df['phone_city'].apply(lambda  x : assign_city_level_bin(x, city_classification_dict))
 
-    phone_city_groupby = phone_city_df.groupby('phone_city_bin')[LABEL]
+    phone_city_groupby = user_info_df.groupby('phone_city_bin')[LABEL]
     bin_count = phone_city_groupby.count()
     bin_badstatus_sum = phone_city_groupby.sum()
 
@@ -179,25 +229,25 @@ def phone_city_analysis():
     x_label='phone city level'
     y_label= 'badrate'
     title='号码归属地城市等级的整体坏账率'
-    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.bar(np.arange(len(x)), y, width = 0.35, facecolor = 'yellowgreen')
     plt.title(title)
-    plt.xticks(range(len(x) + 1), x)
+    plt.xticks(np.arange(len(x)), x)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
     plt.savefig('./visualization_pics/phone_city_badrate.png')
     plt.show()
 
-def identity_city_analysis():
-    identity_city_df = user_info_df['identity_city'].fillna('null')
+def identity_city_classification_analysis():
+    user_info_df['identity_city'].fillna('null', inplace = True)
     city_classification_dict = {}
     with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as  file:
         city_classification_dict = pickle.load(file)
-    identity_city_df['identity_city_bin'] = identity_city_df.apply(lambda  x : assign_city_level_bin(x, city_classification_dict))
-    print(identity_city_df['identity_city_bin'])
-    identity_city_df['loan_status'] = user_info_df['loan_status']
+    user_info_df['identity_city_bin'] = user_info_df['identity_city'].apply(lambda  x : assign_city_level_bin(str(x), city_classification_dict))
+    print(user_info_df['identity_city_bin'])
 
-    identity_city_groupby = identity_city_df.groupby('identity_city_bin')[LABEL]
+
+    identity_city_groupby = user_info_df.groupby('identity_city_bin')[LABEL]
     bin_count = identity_city_groupby.count()   #每个bin的样本数量
     bin_badstatus_sum = identity_city_groupby.sum()   #每个bin的坏样本数量
 
@@ -224,9 +274,9 @@ def identity_city_analysis():
     x_label='identity city classification'
     y_label= 'badrate'
     title='户籍所在城市等级的整体坏账率'
-    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.bar(np.arange(len(x)), y, width = 0.35, facecolor = 'yellowgreen')
     plt.title(title)
-    plt.xticks(range(len(x) + 1), x)
+    plt.xticks(np.arange(len(x)), x)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
@@ -248,8 +298,12 @@ def message_feature_analysis():
 def network_len_analysis():
     network_len_df = user_info_df[['network_len', 'loan_status']]
     network_len_df.fillna('null', inplace=True)
-    network_len_df['network_len'] = network_len_df['network_len'].apply(lambda x : str(x).replace('未查得', 'null'))
-    print(network_len_df['network_len'])
+    network_len_df['network_len_tmp'] = network_len_df['network_len'].apply(lambda x : str(x).replace("未查得", "null"))
+    network_len_df.drop('network_len', inplace = True, axis = 1)
+    network_len_df['network_len'] = network_len_df['network_len_tmp']
+    network_len_df.drop('network_len_tmp', inplace = True, axis = 1)
+
+    print(network_len_df)
 
     groupby_data = network_len_df.groupby('network_len')[LABEL]
     bin_count = groupby_data.count()
@@ -271,16 +325,20 @@ def network_len_analysis():
     x = []
     y = []
     for item in sorted_dict:
+
         x.append(item[0])
         y.append(item[1])
 
     x_label = 'network len year'
     y_label = 'badrate'
 
+    print(x)
+    print(y)
+
     title='入网时间不同区间的整体坏账率'
-    plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
+    plt.bar(np.arange(len(x)), y, width = 0.35, facecolor = 'yellowgreen')
     plt.title(title)
-    plt.xticks(range(len(x) + 1), x)
+    plt.xticks(np.arange(len(x)), x)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
@@ -293,9 +351,13 @@ if __name__ == '__main__':
     # phone_province_analysis()
     # identity_province_analysis()
 
-    # phone_city_analysis()
-    # identity_city_analysis()
+     #phone_city_analysis()
+    #identity_city_classification_analysis()
 
-    message_feature_analysis()
+    #message_feature_analysis()
 
     #network_len_analysis()
+
+    #origin_numericalFeature_correlation_analysis()
+
+    zhima_score_analysis()

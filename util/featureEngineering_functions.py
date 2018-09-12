@@ -24,9 +24,8 @@ def assign_br_score_bin(x):
 
 #划定城市的等级，确定属于哪个层级
 def assign_city_level_bin(city_name, city_level_dict):
-    city_name = city_name.replace('市', '')
-
-    if city_name.find('null') >= 0:
+    reg_city_name = city_name.replace("市", "")
+    if reg_city_name.find('null') >= 0:
         return  'null'
 
     keys = city_level_dict.keys()
@@ -35,10 +34,11 @@ def assign_city_level_bin(city_name, city_level_dict):
         values = list(city_level_dict[key])
 
         for value in values:
-            if str(value).find(city_name) >= 0:
+            if str(value).find(reg_city_name) >= 0:
                 return  key
 
     if flag == False:
+        print(reg_city_name)
         return  '其他'
 
 
