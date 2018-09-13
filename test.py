@@ -7,6 +7,7 @@ import  pickle
 import  pandas as pd
 import  numpy as np
 import  seaborn as sns
+import  matplotlib.pyplot as plt
 
 # df1 = pd.read_excel(ROOT_DIR + 'settings/1.xls', encoding='gbk')
 #
@@ -82,7 +83,36 @@ user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 #
 # print(notnull_df)
 
-joblevel_df = user_info_df[['job_level', 'loan_status']]
-joblevel_df.fillna('未知', inplace = True)
-jobs = set(joblevel_df['job_level'])
-print(jobs)
+# joblevel_df = user_info_df[['job_level', 'loan_status']]
+# joblevel_df.fillna('未知', inplace = True)
+# jobs = set(joblevel_df['job_level'])
+# print(jobs)
+
+
+# np.random.seed(2)  #设置随机种子
+# df = pd.DataFrame(np.random.rand(5,4),
+#                   columns=['A', 'B', 'C', 'D'])
+#
+# plt.boxplot(x=df.values,labels=df.columns,whis=1.5)
+#
+# plt.show()
+
+def list_generator(mean, dis, number):  # 封装一下这个函数，用来后面生成数据
+    return np.random.normal(mean, dis * dis, number)  # normal分布，输入的参数是均值、标准差以及生成的数量
+
+
+# 我们生成四组数据用来做实验，数据量分别为70-100
+list1 = list_generator(0.8531, 0.0956, 70)
+list2 = list_generator(0.8631, 0.0656, 80)
+list3 = list_generator(0.8731, 0.1056, 90)
+list4 = list_generator(0.8831, 0.0756, 100)
+s1 = pd.Series(np.array(list1))
+s2 = pd.Series(np.array(list2))
+s3 = pd.Series(np.array(list3))
+s4 = pd.Series(np.array(list4))
+# 把四个list导入到pandas的数据结构中，dataframe
+data = pd.DataFrame({"1": s1, "2": s2, "3": s3, "4": s4})
+data.boxplot()  # 这里，pandas自己有处理的过程，很方便哦。
+plt.ylabel("ylabel")
+plt.xlabel("xlabel")  # 我们设置横纵坐标的标题。
+plt.show()

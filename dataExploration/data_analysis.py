@@ -52,7 +52,7 @@ def null_counts_analysis():
     plt.show()
 
 #分析芝麻分与其他连续变量的相关性，根据强相关特征来进行用户分群，从而对同组用户进行芝麻分的缺失填补
-def zhima_score_analysis():
+def zhima_score_corrcoef_analysis():
 
     user_info_df.fillna(-1, inplace = True)
     numerical_data = user_info_df[numericalFeatures]
@@ -84,6 +84,15 @@ def zhima_score_analysis():
     features_df = pd.DataFrame()
     features_df['feature'] = features
     features_df.to_excel(ROOT_DIR + 'featureEngineering/zhima_correlation_features.xlsx', index=None)
+
+#观察芝麻分缺失的用户的群体特征情况
+def zhima_score_missing_analysis():
+
+    data_df = user_info_df[user_info_df['zhima_score'].isnull()]
+    job_level_count = data_df.groupby('job_level')['job_level'].count()
+
+    print(job_level_count)
+
 
 
 
@@ -345,13 +354,33 @@ def network_len_analysis():
     plt.savefig('./visualization_pics/network_len_badrate.png')
     plt.show()
 
+#异常值
+def outlier_analysis():
+
+    zhima_score_df = pd.DataFrame(user_info_df[['zhima_score', 'user_age','auth_level']])
+    zhima_score_df.columns = ['zhima_score', 'user_age','auth_level']
+
+    zhima_score_df.fillna(-1, inplace = True)
+    print(zhima_score_df)
+    zhima_score_df.boxplot()  # 这里，pandas自己有处理的过程，很方便哦。
+    plt.ylabel("ylabel")
+    plt.xlabel("xlabel")  # 我们设置横纵坐标的标题。
+    plt.show()
+    #plt.show()
+
+
+
+
 
 if __name__ == '__main__':
     # null_counts_analysis()
+
     # phone_province_analysis()
+
     # identity_province_analysis()
 
-     #phone_city_analysis()
+    #phone_city_analysis()
+
     #identity_city_classification_analysis()
 
     #message_feature_analysis()
@@ -360,4 +389,8 @@ if __name__ == '__main__':
 
     #origin_numericalFeature_correlation_analysis()
 
-    zhima_score_analysis()
+    #zhima_score_corrcoef_analysis()
+
+    #zhima_score_missing_analysis()
+
+    outlier_analysis()
