@@ -11,10 +11,10 @@ features_list = numericalFeatures + categoricalFeatures
 
 label = 'loan_status'
 
-X = data[features_list]
+X = data[features_list + ['user_id']]
 y = data[label]
 
-train_x, test_x, train_y, test_y = train_test_split(X, y, test_size = 0.3, shuffle=True, stratify=y)
+train_x, test_x, train_y, test_y = train_test_split(X, y, test_size = 0.2, shuffle=True, stratify=y)
 print(train_x.shape)
 print(test_x.shape)
 print(train_y.shape)

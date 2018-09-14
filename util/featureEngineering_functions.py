@@ -5,6 +5,19 @@ import  pandas as pd
 import  pickle
 from  settings import  *
 
+def loadFeatures(file):
+
+    lines = []
+    try:
+        with open(file) as f:
+            lines_object = f.readlines()
+
+        for object in lines_object:
+            lines.append(object.strip())
+
+    finally:
+        return  lines
+
 def assign_br_score_bin(x):
     print(x)
     if str(x).find("null") >= 0:
