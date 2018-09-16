@@ -7,6 +7,8 @@ import os,random
 from  settings import  *
 from  util.featureEngineering_functions import *
 
+from sklearn.externals import joblib
+
 class XGBClassifier():
     def __init__(self):
         self.train_df = pd.read_excel(ROOT_DIR + 'train.xlsx', encoding='utf-8')
@@ -49,7 +51,20 @@ class XGBClassifier():
 
         dtrain = xgb.DMatrix(X, label = y)
 
+        #cv: nround = 336
+        nround = 336
+        watchlist  = [(dtrain,'train')]
+        self.model = xgb.train(xgb_params,
+                          dtrain,
+                          num_boost_round = nround,
+                          evals = watchlist)
+
+    def save_model(self, dir):
+        self.model.save_model(dir)
+
+
 
 if __name__ == '__main__':
     clf = XGBClassifier()
-    clf.model_cv('features')
+    #clf.model_cv('features')
+    clf.model_train('features')
