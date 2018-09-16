@@ -9,8 +9,8 @@ from  util.featureEngineering_functions import *
 
 class XGBClassifier():
     def __init__(self):
-        self.train_df = pd.read_excel(ROOT_DIR + 'model/xgboost/train.xlsx', encoding='utf-8')
-        self.test_df = pd.read_excel(ROOT_DIR + 'model/xgboost/test.xlsx', encoding='utf-8')
+        self.train_df = pd.read_excel(ROOT_DIR + 'train.xlsx', encoding='utf-8')
+
 
     def model_cv(self, feature_file):
         print(self.train_df.columns)
@@ -25,18 +25,21 @@ class XGBClassifier():
         cv_log = xgb.cv(xgb_params,
                         dtrain,
                         num_boost_round=  5000,
-                        nfold=8,
+                        nfold=3,
                         metrics='auc',
-                        early_stopping_rounds=50,
-                        show_progress=3,
+                        early_stopping_rounds=200,
                         seed = 2018)
         print(cv_log)
         best_auc= cv_log['test-auc-mean'].max()
+
         cv_log['nb'] = cv_log.index
         cv_log.index = cv_log['test-auc-mean']
+
+        print('cv log nb dict:')
+        print(cv_log.nb.to_dict())
         nround = cv_log.nb.to_dict()[best_auc]
 
-        print(cv_log)
+        print(nround)
 
     def model_train(self, feature_file):
         features = loadFeatures(feature_file)

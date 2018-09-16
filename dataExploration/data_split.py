@@ -7,11 +7,10 @@ from  settings import *
 
 data = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding = 'utf-8')
 
-features_list = numericalFeatures + categoricalFeatures
+features_list = [x for x in data.columns if x not in ['loan_status']]
 
 label = 'loan_status'
-
-X = data[features_list + ['user_id']]
+X = data[features_list]
 y = data[label]
 
 train_x, test_x, train_y, test_y = train_test_split(X, y, test_size = 0.2, shuffle=True, stratify=y)
