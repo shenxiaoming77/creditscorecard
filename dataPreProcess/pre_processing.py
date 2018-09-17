@@ -10,8 +10,8 @@ user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 
 #芝麻分的缺失值处理
 #尝试通过树模型来预测缺失值，相关性较强的其他变量作为该模型特征
-def zhimaScore_missingValue_process():
-    numerical_df = user_info_df[numericalFeatures + ['user_id']]
+def zhimaScore_missingValue_process(df):
+    numerical_df = df[numericalFeatures + ['user_id']]
     test_df = numerical_df[numerical_df['zhima_score'].isnull()]
     train_df = numerical_df[numerical_df['zhima_score'].notnull()]
 
@@ -43,7 +43,10 @@ def zhimaScore_missingValue_process():
         print(score)
 
 
+def job_level_missingValue(df):
+    df['job_level'] = df['job_level'].fillna('其他')
 
 
 
-zhimaScore_missingValue_process()
+#zhimaScore_missingValue_process()
+

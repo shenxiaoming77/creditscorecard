@@ -7,7 +7,7 @@ from  settings import *
 
 data = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding = 'utf-8')
 
-features_list = [x for x in data.columns if x not in ['loan_status']]
+features_list = [x for x in data.columns if x not in ['loan_status', 'bill_id', 'phone', 'name']]
 
 label = 'loan_status'
 X = data[features_list]

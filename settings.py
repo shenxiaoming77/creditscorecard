@@ -1,6 +1,6 @@
 #coding=utf-8
 
-ROOT_DIR = 'E:/conf_test/creditscored/'
+ROOT_DIR = 'D:/conf_test/creditscored/'
 FE_DIR = ROOT_DIR + 'featureEngineering/'  #featureEngineering_dir
 
 
@@ -40,6 +40,9 @@ xgb_params = {
         'verbose_eval' : True,
         'seed' : 1024
     }
+
+
+
 
 
 

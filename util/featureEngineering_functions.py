@@ -4,6 +4,7 @@ import  numpy as np
 import  pandas as pd
 import  pickle
 from  settings import  *
+import  datetime
 
 def loadFeatures(file):
 
@@ -55,10 +56,36 @@ def assign_city_level_bin(city_name, city_level_dict):
         return  '其他'
 
 
+def days(str1,str2):
+    date1=datetime.datetime.strptime(str1[0:10],"%Y-%m-%d")
+    date2=datetime.datetime.strptime(str2[0:10],"%Y-%m-%d")
+    num =(date1-date2).days
+    return num
+
+def job_level_combine_func(job_level):
+    if job_level == "主管":
+        return  "主任/主管/组长/初级管理"
+    elif job_level == "总监" or job_level == "总经理":
+        return "总监/总经理/高管"
+    elif job_level == "经理":
+        return  "经理/中级管理"
+    else:
+        return  job_level
+
 
 if __name__ == '__main__':
     #assign_city_level_bin('杭州市')
-    with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as file:
-        city_level_dict = pickle.load(file)
-    print(city_level_dict)
-    print(assign_city_level_bin('null', city_level_dict))
+    # with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as file:
+    #     city_level_dict = pickle.load(file)
+    # print(city_level_dict)
+    # print(assign_city_level_bin('null', city_level_dict))
+
+    train_df = pd.read_excel(ROOT_DIR + 'train.xlsx', encoding = 'utf-8')
+    length = len(train_df['apply_date'])
+
+
+    for i in range(length):
+        date1 = list(train_df['register_date'])[i]
+        date2 = list(train_df['apply_date'])[i]
+
+        print(days(str(date2), str(date1)))

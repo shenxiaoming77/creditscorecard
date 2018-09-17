@@ -68,3 +68,4 @@ if __name__ == '__main__':
     clf = XGBClassifier()
     #clf.model_cv('features')
     clf.model_train('features')
+    clf.save_model(ROOT_DIR + 'model/xgboost/xgb.model')

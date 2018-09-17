@@ -1,5 +1,6 @@
 特征编码：
-    在完成feature extraction后进行特征的卡方分箱，WOE编码等
+   1. LR模型场景下特征的卡方分箱，WOE编码等
+   2. GBDT等树模型场景下对类别变量进行one-hot编码
   
 卡方分箱与badrate单调性处理目标：
 一般要求bins对应的badrate要满足单调，或者根据变量业务含义 满足U型

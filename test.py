@@ -97,22 +97,26 @@ user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 #
 # plt.show()
 
-def list_generator(mean, dis, number):  # 封装一下这个函数，用来后面生成数据
-    return np.random.normal(mean, dis * dis, number)  # normal分布，输入的参数是均值、标准差以及生成的数量
+# def list_generator(mean, dis, number):  # 封装一下这个函数，用来后面生成数据
+#     return np.random.normal(mean, dis * dis, number)  # normal分布，输入的参数是均值、标准差以及生成的数量
 
 
-# 我们生成四组数据用来做实验，数据量分别为70-100
-list1 = list_generator(0.8531, 0.0956, 70)
-list2 = list_generator(0.8631, 0.0656, 80)
-list3 = list_generator(0.8731, 0.1056, 90)
-list4 = list_generator(0.8831, 0.0756, 100)
-s1 = pd.Series(np.array(list1))
-s2 = pd.Series(np.array(list2))
-s3 = pd.Series(np.array(list3))
-s4 = pd.Series(np.array(list4))
-# 把四个list导入到pandas的数据结构中，dataframe
-data = pd.DataFrame({"1": s1, "2": s2, "3": s3, "4": s4})
-data.boxplot()  # 这里，pandas自己有处理的过程，很方便哦。
-plt.ylabel("ylabel")
-plt.xlabel("xlabel")  # 我们设置横纵坐标的标题。
-plt.show()
+# # 我们生成四组数据用来做实验，数据量分别为70-100
+# list1 = list_generator(0.8531, 0.0956, 70)
+# list2 = list_generator(0.8631, 0.0656, 80)
+# list3 = list_generator(0.8731, 0.1056, 90)
+# list4 = list_generator(0.8831, 0.0756, 100)
+# s1 = pd.Series(np.array(list1))
+# s2 = pd.Series(np.array(list2))
+# s3 = pd.Series(np.array(list3))
+# s4 = pd.Series(np.array(list4))
+# # 把四个list导入到pandas的数据结构中，dataframe
+# data = pd.DataFrame({"1": s1, "2": s2, "3": s3, "4": s4})
+# data.boxplot()  # 这里，pandas自己有处理的过程，很方便哦。
+# plt.ylabel("ylabel")
+# plt.xlabel("xlabel")  # 我们设置横纵坐标的标题。
+# plt.show()
+
+
+jobLevel_set = set(user_info_df['job_level'])
+print(jobLevel_set)
