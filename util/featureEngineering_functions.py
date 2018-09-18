@@ -5,6 +5,7 @@ import  pandas as pd
 import  pickle
 from  settings import  *
 import  datetime
+from  math import  isnan
 
 def loadFeatures(file):
 
@@ -38,9 +39,11 @@ def assign_br_score_bin(x):
 
 #划定城市的等级，确定属于哪个层级
 def assign_city_level_bin(city_name, city_level_dict):
+    print(str(city_name))
+    if str(city_name).find('nan') >= 0:
+        return  '其他'
+
     reg_city_name = city_name.replace("市", "")
-    if reg_city_name.find('null') >= 0:
-        return  'null'
 
     keys = city_level_dict.keys()
     flag = False
