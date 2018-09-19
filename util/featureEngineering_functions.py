@@ -58,6 +58,52 @@ def assign_city_level_bin(city_name, city_level_dict):
         print(reg_city_name)
         return  '其他'
 
+#对年龄进行区间划分
+def assign_age_bin(x):
+    if 18<=x<=20:
+        return 0
+    elif 20<x<=35:
+        return 1
+    elif 35<x<=50:
+        return 2
+    elif 50<x<=60:
+        return 3
+
+#芝麻信用分等级划分
+#第一级：300分~500分
+#第二级：500分~600分
+#第三级：600分~700分
+#第四级：700分~800分
+#第五级：800分~950分
+def assign_zhimaScore_bin(x):
+    score = int(x)
+    if  300 < score <= 500:
+        return  0
+    elif 500 < score <= 600:
+        return 1
+    elif 600 < score <= 700:
+        return  2
+    elif 700 < score <= 800:
+        return  3
+    elif score > 900:
+        return  4
+    else:
+        return  -1
+
+#百融信用分
+#[300,500) 高风险，建议拒绝
+#[500,550) 中风险，建议关注
+#[550,1000] 低风险风险，建议通过
+def assign_brScore_bin(x):
+    score = int(x)
+    if 300 <= score < 500:
+        return 0
+    elif 500 <= score < 550:
+        return  1
+    elif score >= 550:
+        return  2
+    else:
+        return  -1
 
 def days(str1,str2):
     date1=datetime.datetime.strptime(str1[0:10],"%Y-%m-%d")
@@ -74,6 +120,17 @@ def job_level_combine_func(job_level):
         return  "经理/中级管理"
     else:
         return  job_level
+
+def network_len_combine_func(networkLen):
+    length = str(networkLen)
+    if length == '(3,6]':
+        return  '(0,6]'
+    elif length == '6':
+        return  '(0,6]'
+    elif length == '未查得':
+        return  'missing'
+    else:
+        return  length
 
 
 if __name__ == '__main__':

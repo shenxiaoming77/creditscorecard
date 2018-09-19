@@ -53,7 +53,7 @@ def seemingly_abnormity_application(derivation_df):
     derivation_df['seemingly_abnormity_application'] = train_df.apply(lambda row : jobLevel_cross_applyDatehour(row
 ["job_level"], row["applyDate_hour"]), axis = 1)
 
-
+#城市名称衍生出城市等级变量
 def identity_city_classification(derivation_df):
     with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as file:
          city_level_dict = pickle.load(file)
@@ -61,6 +61,7 @@ def identity_city_classification(derivation_df):
         .apply(lambda x : assign_city_level_bin(x, city_level_dict))
     file.close()
 
+#城市名称衍生出城市等级变量
 def phone_city_classification(derivation_df):
     with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as file:
          city_level_dict = pickle.load(file)
