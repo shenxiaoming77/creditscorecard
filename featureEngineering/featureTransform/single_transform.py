@@ -15,7 +15,14 @@ def job_level_combine(df):
     df['job_level'] = df['job_level'].apply(lambda x : job_level_combine_func(x))
     print(set(df['job_level']))
 
+#network_len中的几个时间段存在重合，进行合并
+def network_len_combine(df):
+
+    df['network_len'] = df['network_len'].apply(lambda  x : network_len_combine_func(x))
 
 if __name__ == '__main__':
     user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
-    job_level_combine(user_info_df)
+    #job_level_combine(user_info_df)
+    network_len_combine(user_info_df)
+    print(set(user_info_df['network_len']))
+

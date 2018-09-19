@@ -17,11 +17,14 @@ user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 def null_counts_analysis():
     null_count_dict = {}
     total = len(user_info_df['job_level'])
-    features_list = numericalFeatures + categoricalFeatures
+    features_list = [x for x in user_info_df.columns if x not in ['user_id', 'loan_status', 'bill_id',
+                                                                  'phone','name','identity']]
 
     for var in features_list:
         null_count = len(user_info_df[var]) - user_info_df[var].count()
         null_count_dict[var] = null_count
+        if null_count > 0:
+            print(var)
 
     #升序排列
     sorted_dict = sorted(null_count_dict.items(), key = lambda  d : d[1], reverse = True)
@@ -34,9 +37,6 @@ def null_counts_analysis():
         x.append(item[0])
         y.append(item[1] * 1.0 / total)
         i += 1
-
-    print(x)
-    print(y)
 
     x_label='features'
     y_label= 'NAN Count Num'
@@ -306,7 +306,7 @@ def message_feature_analysis():
 
 def network_len_analysis():
     network_len_df = user_info_df[['network_len', 'loan_status']]
-    network_len_df.fillna('null', inplace=True)
+    network_len_df.fillna('missing', inplace=True)
     network_len_df['network_len_tmp'] = network_len_df['network_len'].apply(lambda x : str(x).replace("未查得", "null"))
     network_len_df.drop('network_len', inplace = True, axis = 1)
     network_len_df['network_len'] = network_len_df['network_len_tmp']
@@ -373,7 +373,7 @@ def outlier_analysis():
 
 
 if __name__ == '__main__':
-    # null_counts_analysis()
+    #null_counts_analysis()
 
     # phone_province_analysis()
 
@@ -385,7 +385,7 @@ if __name__ == '__main__':
 
     #message_feature_analysis()
 
-    #network_len_analysis()
+    network_len_analysis()
 
     #origin_numericalFeature_correlation_analysis()
 
@@ -393,4 +393,4 @@ if __name__ == '__main__':
 
     #zhima_score_missing_analysis()
 
-    outlier_analysis()
+    #outlier_analysis()

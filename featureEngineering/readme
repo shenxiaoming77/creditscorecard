@@ -17,24 +17,25 @@ categoricalFeatures: 类别性的衍生特征名称 不以WOE结尾
 
 特征处理与特征衍生的方案：
 
-1.原始的类别变量与连续变量转换方式：
-
-user_age：作为连续变量，直接引入
+1.原始的类别变量：
 gender；作为类别变量引入
 job_level：原始变量合并后，作为类别变量引入
 phone_province：32个省份，作为无序类别变量，每个省当做一个bin分箱，每个bin的badrate直接作为该省的编码值
 identity_province：32个省份，作为无序类别变量，每个省当做一个bin分箱，每个bin的badrate直接作为该省的编码值
 is_identical_phone_identity_province：二值类别变量，但对样本正负性几乎没有区分度，考虑直接删除
-zhima_score：连续变量
 network_len：合并后，按有序类别变量引入
 auth_level：类别变量引入
 occupation：无序的类别变量引入
-company_college_length：连续变量
 loan_status： 因变量
 registerDate_xunYue：类别变量引入
 applyDate_xunYue：类别变量引入
-registerDate_hour：连续变量
+
+2. 原始的连续变量
 applyDate_hour：连续变量
+company_college_length：连续变量
+zhima_score：连续变量
+user_age：作为连续变量，直接引入
+registerDate_hour：连续变量
 
 以下从短信数据解析出来的全部作为连续变量引入：
 m1_verif_count
@@ -75,7 +76,7 @@ m12_overdue_replay_count
 m12_repay_remind_count
 
 
-2  单变量转换的衍生特征：
+3  单变量得到的衍生特征：
 
 identity_city：转换生成成五个城市等级的新类别，作为有序类别变量引入
 phone_city：转换生成成五个城市等级的新类别，作为有序类别变量引入
@@ -84,6 +85,6 @@ br_score：缺失度较高，按区间映射，衍生出有序的新类别变量
 registerDate_hour：根据小时数衍生是否半夜注册账户的类别变量
 applyDate_hour：根据小时数衍生是否半夜申请贷款的类别变量
 
-3 多变量交叉的衍生特征：
+4 多变量交叉得到的衍生特征：
 job_level && applyDate_hour：同时检测是否是特定的几个job_level的用户在0点到6点内申请，作为衍生的类别变量
 apply_date && register_date：将apply_date减去register_date得到的时间差值，作为新的变量引入
