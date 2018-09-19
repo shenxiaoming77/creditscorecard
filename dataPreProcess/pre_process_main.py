@@ -18,7 +18,7 @@ class PreProcessRunner():
 
     def nullValueProcess(self):
         print('zhima score missing value process:')
-        zhimaScore_df = pd.read_excel(ROOT_DIR + 'zhima_missingvalue.xlsx')
+        zhimaScore_df = pd.read_excel(ROOT_DIR + 'zhima_missingValue.xlsx')
         zhimaScore_missingValue_ByCluster(self.data_df, zhimaScore_df)
         print('job level missing value process:')
         job_level_missingValue(self.data_df)

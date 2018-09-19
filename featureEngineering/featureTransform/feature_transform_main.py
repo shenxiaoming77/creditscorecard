@@ -19,7 +19,25 @@ class FeatureTransformRunner():
 
     def featureDerivation(self):
         print('feature derivation:')
+        register_apply_date_interval(self.data_df, self.derivation_df)
+        seemingly_abnormity_application(self.data_df, self.derivation_df)
 
+        identity_city_classification(self.data_df, self.derivation_df)
+        phone_city_classification(self.data_df, self.derivation_df)
+
+        user_age_classification(self.data_df, self.derivation_df)
+        zhima_score_classification(self.data_df, self.derivation_df)
+        br_score_classification(self.data_df, self.derivation_df)
+
+
+
+    def singleFeatureTransform(self):
+        job_level_combine(self.data_df)
+        network_len_combine(self.data_df)
+
+    def saveData(self, file):
+        self.data_df.to_excel(ROOT_DIR + file, index=None, encoding='utf-8')
+        self.derivation_df.to_excel(ROOT_DIR + 'derivation_features_data.xlsx', index=None)
 
 if __name__ == '__main__':
     data_df = pd.read_excel(ROOT_DIR + 'preProcessed_user_info.xlsx', encoding='utf-8')
@@ -27,4 +45,8 @@ if __name__ == '__main__':
     transformRunner = FeatureTransformRunner()
     transformRunner.setData(data_df)
 
+    transformRunner.singleFeatureTransform()
+    transformRunner.featureDerivation()
+
+    transformRunner.saveData('transformed_user_info.xlsx')
 

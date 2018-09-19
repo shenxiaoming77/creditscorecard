@@ -82,8 +82,7 @@ identity_city：转换生成成五个城市等级的新类别，作为有序类�
 phone_city：转换生成成五个城市等级的新类别，作为有序类别变量引入
 zhima_score：按区间映射，将芝麻分衍生出不同区间等级的有序类别变量引入
 br_score：缺失度较高，按区间映射，衍生出有序的新类别变量引入
-registerDate_hour：根据小时数衍生是否半夜注册账户的类别变量
-applyDate_hour：根据小时数衍生是否半夜申请贷款的类别变量
+user_age: 按年龄段进行区间划分
 
 4 多变量交叉得到的衍生特征：
 job_level && applyDate_hour：同时检测是否是特定的几个job_level的用户在0点到6点内申请，作为衍生的类别变量

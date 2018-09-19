@@ -20,25 +20,8 @@ def loadFeatures(file):
     finally:
         return  lines
 
-def assign_br_score_bin(x):
-    print(x)
-    if str(x).find("null") >= 0:
-        print('is null')
-        return  0
-    score = int(x)
-    if score < 500:
-        return 1
-    elif score < 550 & score >= 500:
-        return  2
-    elif score < 600 & score >= 550:
-        return  3
-    elif score < 650 & score >= 600:
-        return  4
-    else:
-        return  5
-
 #划定城市的等级，确定属于哪个层级
-def assign_city_level_bin(city_name, city_level_dict):
+def assign_city_level_classification(city_name, city_level_dict):
     print(str(city_name))
     if str(city_name).find('nan') >= 0:
         return  '其他'
@@ -59,14 +42,15 @@ def assign_city_level_bin(city_name, city_level_dict):
         return  '其他'
 
 #对年龄进行区间划分
-def assign_age_bin(x):
-    if 18<=x<=20:
+def assign_age_classification(age):
+    x = int(age)
+    if 18<= x <=20:
         return 0
-    elif 20<x<=35:
+    elif 20< x <=35:
         return 1
-    elif 35<x<=50:
+    elif 35< x <=50:
         return 2
-    elif 50<x<=60:
+    elif 50< x <=60:
         return 3
 
 #芝麻信用分等级划分
@@ -75,7 +59,7 @@ def assign_age_bin(x):
 #第三级：600分~700分
 #第四级：700分~800分
 #第五级：800分~950分
-def assign_zhimaScore_bin(x):
+def assign_zhimaScore_classification(x):
     score = int(x)
     if  300 < score <= 500:
         return  0
@@ -94,7 +78,7 @@ def assign_zhimaScore_bin(x):
 #[300,500) 高风险，建议拒绝
 #[500,550) 中风险，建议关注
 #[550,1000] 低风险风险，建议通过
-def assign_brScore_bin(x):
+def assign_brScore_classification(x):
     score = int(x)
     if 300 <= score < 500:
         return 0
@@ -105,22 +89,22 @@ def assign_brScore_bin(x):
     else:
         return  -1
 
+def jobLevel_cross_applyDatehour(job, apply_hour):
+    job_list = ["专业技术人员/设计师/工程师", "主任/主管/组长/初级管理", "学生", "总监/总经理/高管",
+                "普通员工","经理/中级管理","销售人员"]
+    hour = int(apply_hour)
+    if job in job_list and hour >= 0 and hour <= 6:
+        return  1
+    else:
+        return  0
+
 def days(str1,str2):
     date1=datetime.datetime.strptime(str1[0:10],"%Y-%m-%d")
     date2=datetime.datetime.strptime(str2[0:10],"%Y-%m-%d")
     num =(date1-date2).days
     return num
 
-def assign_age_bin(age):
-    x = int(age)
-    if 18<= x <=20:
-        return 0
-    elif 20< x <=35:
-        return 1
-    elif 35< x <=50:
-        return 2
-    elif 50< x <=60:
-        return 3
+
 
 def job_level_combine_func(job_level):
     if job_level == "主管":
