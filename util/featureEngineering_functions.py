@@ -65,6 +65,17 @@ def days(str1,str2):
     num =(date1-date2).days
     return num
 
+def assign_age_bin(age):
+    x = int(age)
+    if 18<= x <=20:
+        return 0
+    elif 20< x <=35:
+        return 1
+    elif 35< x <=50:
+        return 2
+    elif 50< x <=60:
+        return 3
+
 def job_level_combine_func(job_level):
     if job_level == "主管":
         return  "主任/主管/组长/初级管理"
