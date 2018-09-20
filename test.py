@@ -117,6 +117,10 @@ user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 # plt.xlabel("xlabel")  # 我们设置横纵坐标的标题。
 # plt.show()
 
+province_dict_df = pd.read_excel(ROOT_DIR + 'settings/province_badrate_classification.xlsx', encoding='utf-8')
+y = 'loan_status'
+x = set(list(province_dict_df)).difference(set([y]))
+print(x)
+#dict = province_dict_df.set_index('identity_province').T.to_dict('int')['classification']
 
-jobLevel_set = set(user_info_df['job_level'])
-print(jobLevel_set)
+print(set(list(province_dict_df)))

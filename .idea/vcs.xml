@@ -3,6 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="" />
     <mapping directory="$PROJECT_DIR$/../RistCreditControl" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/../scorecardpy" vcs="Git" />
   </component>
 </project>
 

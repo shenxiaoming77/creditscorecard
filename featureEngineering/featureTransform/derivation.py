@@ -50,13 +50,22 @@ def identity_city_classification(train_df, derivation_df):
         .apply(lambda x : assign_city_level_classification(x, city_level_dict))
     file.close()
 
-#城市名称衍生出城市等级变量
+#根据所属城市衍生出城市等级变量
 def phone_city_classification(train_df, derivation_df):
     with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as file:
          city_level_dict = pickle.load(file)
     derivation_df['phone_city_classification'] = train_df['phone_city']\
         .apply(lambda x : assign_city_level_classification(x, city_level_dict))
     file.close()
+
+#根据所属省份的整体badrate划分的等级，将省份信息衍生出离散特征
+def identity_province_classification(train_df, derivation_df):
+    province_dict_df = pd.read_excel(ROOT_DIR + 'settings/province_badrate_classification.xlsx', encoding='utf-8')
+    province_dict = province_dict_df.set_index('identity_province').T.to_dict('int')['classification']
+
+    derivation_df['identity_province_classification'] = train_df['identity_province']\
+        .apply(lambda x : province_dict[x])
+
 
 def user_age_classification(train_df, derivation_df):
     derivation_df['user_age_classification'] = train_df['user_age']\
@@ -78,8 +87,10 @@ if __name__ == '__main__':
     # register_apply_date_interval(train_df, derivation_df)
     # seemingly_abnormity_application(train_df, derivation_df)
 
-    identity_city_classification(train_df, derivation_df)
-    phone_city_classification(train_df, derivation_df)
+    #identity_city_classification(train_df, derivation_df)
+    #phone_city_classification(train_df, derivation_df)
+
+    identity_province_classification(train_df, derivation_df)
 
     print(derivation_df)
 

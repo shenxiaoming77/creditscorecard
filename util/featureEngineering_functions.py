@@ -20,6 +20,8 @@ def loadFeatures(file):
     finally:
         return  lines
 
+
+
 #划定城市的等级，确定属于哪个层级
 def assign_city_level_classification(city_name, city_level_dict):
     print(str(city_name))

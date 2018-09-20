@@ -5,6 +5,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="CreditRistControl" />
+    <orderEntry type="module" module-name="scorecardpy" />
   </component>
 </module>
 

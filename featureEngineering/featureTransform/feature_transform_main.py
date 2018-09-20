@@ -25,6 +25,8 @@ class FeatureTransformRunner():
         identity_city_classification(self.data_df, self.derivation_df)
         phone_city_classification(self.data_df, self.derivation_df)
 
+        identity_province_classification(self.data_df, self.derivation_df)
+
         user_age_classification(self.data_df, self.derivation_df)
         zhima_score_classification(self.data_df, self.derivation_df)
         br_score_classification(self.data_df, self.derivation_df)
@@ -38,6 +40,11 @@ class FeatureTransformRunner():
     def saveData(self, file):
         self.data_df.to_excel(ROOT_DIR + file, index=None, encoding='utf-8')
         self.derivation_df.to_excel(ROOT_DIR + 'derivation_features_data.xlsx', index=None)
+
+        with open('derivation_features', 'w') as file:
+            for var in [x for x in self.derivation_df.columns if x not in ['user_id']]:
+                file.write(var + '\n')
+        file.close()
 
 if __name__ == '__main__':
     data_df = pd.read_excel(ROOT_DIR + 'preProcessed_user_info.xlsx', encoding='utf-8')

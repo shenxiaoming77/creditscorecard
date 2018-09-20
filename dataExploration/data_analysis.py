@@ -8,7 +8,7 @@ import  seaborn as sns
 
 from  settings import  *
 
-from  util.featureEngineering_functions import assign_city_level_bin
+from  util.featureEngineering_functions import *
 
 user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 
@@ -125,7 +125,7 @@ def origin_numericalFeature_correlation_analysis():
 
 
 def phone_province_analysis():
-    user_info_df['phone_province'].fillna('null', inplace = True)
+    user_info_df['phone_province'].fillna('missing', inplace = True)
 
     phone_province_groupby = user_info_df.groupby('phone_province')[LABEL]
     groupby_count = phone_province_groupby.count()
@@ -143,7 +143,7 @@ def phone_province_analysis():
         print(keys[i], '    ', sum_list[i], '   ', count_list[i])
 
     #升序排列
-    sorted_dict = sorted(badrate_dict.items(), key = lambda  d : d[1], reverse = True)
+    sorted_dict = sorted(badrate_dict.items(), key = lambda  d : d[1], reverse = False)
 
     with open(ROOT_DIR + 'dataExploration/phone_province_badrate.pkl', 'wb') as file:
         pickle.dump(sorted_dict, file)
@@ -166,7 +166,7 @@ def phone_province_analysis():
     plt.show()
 
 def identity_province_analysis():
-    user_info_df['identity_province'].fillna('null', inplace = True)
+    user_info_df['identity_province'].fillna('missing', inplace = True)
 
     identity_province_groupby = user_info_df.groupby('identity_province')[LABEL]
     groupby_count = identity_province_groupby.count()
@@ -176,7 +176,7 @@ def identity_province_analysis():
     count_list = list(groupby_count)
     sum_list = list(groupby_sum)
     keys = list(dict(list(identity_province_groupby)).keys())
-
+    print(keys)
     badrate_dict = {}
     for i in range(len(keys)):
         badrate_dict[keys[i]] = (sum_list[i] * 1.0 / count_list[i])
@@ -210,7 +210,7 @@ def phone_city_analysis():
     city_classification_dict = {}
     with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as  file:
         city_classification_dict = pickle.load(file)
-    user_info_df['phone_city_bin'] = user_info_df['phone_city'].apply(lambda  x : assign_city_level_bin(x, city_classification_dict))
+    user_info_df['phone_city_bin'] = user_info_df['phone_city'].apply(lambda  x : assign_city_level_classification(x, city_classification_dict))
 
     phone_city_groupby = user_info_df.groupby('phone_city_bin')[LABEL]
     bin_count = phone_city_groupby.count()
@@ -252,7 +252,8 @@ def identity_city_classification_analysis():
     city_classification_dict = {}
     with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as  file:
         city_classification_dict = pickle.load(file)
-    user_info_df['identity_city_bin'] = user_info_df['identity_city'].apply(lambda  x : assign_city_level_bin(str(x), city_classification_dict))
+    user_info_df['identity_city_bin'] = user_info_df['identity_city']\
+        .apply(lambda  x : assign_city_level_classification(str(x), city_classification_dict))
     print(user_info_df['identity_city_bin'])
 
 
@@ -375,9 +376,9 @@ def outlier_analysis():
 if __name__ == '__main__':
     #null_counts_analysis()
 
-    # phone_province_analysis()
+    #phone_province_analysis()
 
-    # identity_province_analysis()
+    identity_province_analysis()
 
     #phone_city_analysis()
 
@@ -385,7 +386,7 @@ if __name__ == '__main__':
 
     #message_feature_analysis()
 
-    network_len_analysis()
+    #network_len_analysis()
 
     #origin_numericalFeature_correlation_analysis()
 
