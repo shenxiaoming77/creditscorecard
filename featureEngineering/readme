@@ -37,7 +37,6 @@ zhima_score：连续变量
 user_age：作为连续变量，直接引入
 registerDate_hour：连续变量
 
-以下从短信数据解析出来的全部作为连续变量引入：
 m1_verif_count
 m1_register_count
 m1_apply_request_count
@@ -78,13 +77,21 @@ m12_repay_remind_count
 
 3  单变量得到的衍生特征：
 
-identity_city：转换生成成五个城市等级的新类别，作为有序类别变量引入：identity_city_classification
-phone_city：转换生成成五个城市等级的新类别，作为有序类别变量引入：phone_city_classification
-zhima_score：按区间映射，将芝麻分衍生出不同区间等级的有序类别变量引入：zhima_score_classification
-br_score：缺失度较高，按区间映射，衍生出有序的新类别变量引入：br_score_classification
-user_age: 按年龄段进行区间划分： user_age_classification
-identity_province: 按badrate进行了区间划分，衍生出离散变量：identity_province_classification
+identity_city_classification：转换生成成五个城市等级的新类别，作为有序类别变量引入
+phone_city_classification：转换生成成五个城市等级的新类别，作为有序类别变量引入
+zhima_score_classification：按区间映射，将芝麻分衍生出不同区间等级的有序类别变量引入
+br_score_classification：缺失度较高，按区间映射，衍生出有序的新类别变量引入
+user_age_classification: 按年龄段进行区间划分
+identity_province_classification: 按badrate进行了区间划分，衍生出离散变量
 
 4 多变量交叉得到的衍生特征：
 job_level && applyDate_hour：同时检测是否是特定的几个job_level的用户在0点到6点内申请，作为衍生的类别变量
 apply_date && register_date：将apply_date减去register_date得到的时间差值，作为新的变量引入
+
+5 无法直接引入，需要删去的原始变量
+  br_score
+  phone_city
+  identity_city
+  is_identical_phone_identity_province
+  register_date
+  apply_date

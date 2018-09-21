@@ -9,18 +9,24 @@ from  util.scorecard_functions import *
 
 '''
 badrate所有不单调的类别变量:
-not_monotone_list = ['job_level', 'phone_province', 'phone_city', 'identity_province',
-                    'identity_city',
-                    'registerDate_hour', 'applyDate_hour']
+'auth_level',
+'network_len',
+'identity_city_classification',
+'phone_city_classification',
+'zhima_score_classification',
+'br_score_classification',
+'user_age_classification'
 '''
 
 '''
 1. 离散化程度高且无序的变量，直接用badrate进行编码
-job_level
+job_level, phone_province,identity_province,occupation
 '''
 
+categoricalFeatures = FEATURE_DICT['categoricalFeatures']
+
 not_monotone_list = []
-train_data = pd.read_excel(ROOT_DIR + 'train.xlsx', encoding = 'utf-8')
+train_data = pd.read_excel(ROOT_DIR + 'transformed_train.xlsx', encoding = 'utf-8')
 
 def  visualization(var, x, y, x_label, y_label, title):
     plt.bar(x, y, width = 0.35, facecolor = 'yellowgreen')
@@ -32,11 +38,7 @@ def  visualization(var, x, y, x_label, y_label, title):
     plt.savefig('./visualization_pics/%s_badrate.png' %(var))
     plt.show()
 
-for var in categoricalFeatures:
-    if not BadRateMonotone(train_data, var, target=LABEL):
-            not_monotone_list.append(var)
 
-print(not_monotone_list)
 
 def monotone_analysis(train_data, var):
     #print(train_data.groupby(var)[LABEL].mean())
@@ -64,8 +66,16 @@ def monotone_analysis(train_data, var):
         key = item[0]
         print(item[0], '    ', item[1], '   ', count_dict[key])
 
-var = 'applyDate_hour'
+# for var in categoricalFeatures:
+#     if not BadRateMonotone(train_data, var, target=LABEL):
+#             not_monotone_list.append(var)
+#
+# print(not_monotone_list)
+
+var = 'identity_city_classification'
 #monotone_analysis(train_data, var)
+
+print(set(train_data['identity_city_classification']))
 
 dicts, regroup = BinBadRate(train_data, var, LABEL)
 
@@ -76,4 +86,4 @@ print(regroup)
 
 print(regroup[var].values)
 
-visualization(var, regroup[var].values, list(regroup.bad_rate.values), x_label='hour', y_label='badrate', title='title')
+visualization(var, regroup[var].values, list(regroup.bad_rate.values), x_label= var, y_label='badrate', title='title')

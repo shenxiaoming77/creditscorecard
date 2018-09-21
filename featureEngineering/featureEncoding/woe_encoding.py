@@ -12,14 +12,19 @@ from  settings import  *
 class WOEEncoding:
 
     def __init__(self, file):
-        self.categoricalFeatures = categoricalFeatures
-        self.numericalFeatures = numericalFeatures
+        self.categoricalFeatures = FEATURE_DICT['categoricalFeatures']
+        self.numericalFeatures = FEATURE_DICT['numericalFeatures']
         self.WOE_IV_dict = {}
-        self.train_data = pd.read_excel(file)
-
-        self.toRemove_list = []
-
+        self.toRemove_list = FEATURE_DICT['toRemoveFeatures']
         self.bin_dict = []
+
+        self.loadData(file)
+
+    def loadData(self, file):
+        self.train_data = pd.read_excel(file, encoding='utf-8')
+
+    def setData(self, data):
+        self.train_data = data
 
     def feature_encoding_process(self):
 
@@ -172,5 +177,5 @@ class WOEEncoding:
             pickle.dump(self.bin_dict, f3)
 
 if __name__ == '__main__':
-    woeEncoding = WOEEncoding(ROOT_DIR + 'train.xlsx')
+    woeEncoding = WOEEncoding(ROOT_DIR + 'transformed_train.xlsx')
     woeEncoding.feature_encoding_process()

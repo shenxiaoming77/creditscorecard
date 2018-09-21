@@ -19,6 +19,10 @@ def job_level_combine(df):
 def network_len_combine(df):
     df['network_len'] = df['network_len'].apply(lambda  x : network_len_combine_func(x))
 
+#有序的类别变量进行label encode编码
+def feature_labelEncode(df):
+
+
 if __name__ == '__main__':
     user_info_df = pd.read_excel(ROOT_DIR + 'preProcessed_user_info.xlsx', encoding='utf-8')
     #job_level_combine(user_info_df)
