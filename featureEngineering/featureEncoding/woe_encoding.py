@@ -30,7 +30,7 @@ class WOEEncoding:
 
         #类别型变量与连续数值型变量分别进行卡方分箱与WOE编码
         self.categorical_feature_encoding()
-        return
+
         self.numerical_feature_encoding()
 
         #保存最终的WOE编码结果 以及相关特征分箱等信息，用于后续多变量分析 以及模型训练
@@ -66,10 +66,10 @@ class WOEEncoding:
         #计算WOE值
         self.compute_woe('auth_level_Bin')
         self.compute_woe('network_len_Bin')
-        self.compute_woe('network_len_Bin')
-        self.compute_woe('network_len_Bin')
-        self.compute_woe('network_len_Bin')
-        self.compute_woe('network_len_Bin')
+        self.compute_woe('identity_city_classification_Bin')
+        self.compute_woe('phone_city_classification_Bin')
+        self.compute_woe('br_score_classification_Bin')
+        self.compute_woe('user_age_classification_Bin')
 
 
     def compute_woe(self, var):
@@ -129,7 +129,9 @@ class WOEEncoding:
             print(i)
 
         for var in small_bin_var:
-            self.compute_woe(var)
+            for key, value in var.items():
+                print(key)
+                self.compute_woe(key)
 
 
         #2.2:针对large_bin_var中的变量进行处理
