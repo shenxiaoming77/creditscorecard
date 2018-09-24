@@ -92,8 +92,37 @@ FEATURE_DICT = {
                 ]
 }
 
-
-auth_level : {'(6,12]', '(0,6]', '(24,+)', '(12,24]', 'missing'}
-identity_city_classification : {'五线', '二线', '新一线', '三线', '其他', '一线', '四线'}
-
+LABEL_ENCODE_DICT = {
+    'network_len' : {'(6,12]' : 2,
+                     '(0,6]':1,
+                     '(24,+)':4,
+                     '(12,24]':3,
+                     'missing':0},
+    'identity_city_classification' :{ '五线':6,
+                                         '二线':3,
+                                         '新一线':2,
+                                         '三线':4,
+                                         '其他': 0,
+                                         '一线':1,
+                                         '四线':5
+                                        },
+    'phone_city_classification' : {'五线':6,
+                                      '二线':3,
+                                      '新一线':2,
+                                      '三线':4,
+                                      '其他': 0,
+                                      '一线':1,
+                                      '四线':5
+                                     },
+    'registerDate_xunYue' : {'missing':0,
+                                      '上旬':1,
+                                      '中旬':2,
+                                      '下旬':3,
+                                     },
+    'applyDate_xunYue' : {'missing':0,
+                                      '上旬':1,
+                                      '中旬':2,
+                                      '下旬':3,
+                                     }
+}
 

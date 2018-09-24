@@ -74,7 +74,7 @@ import  matplotlib.pyplot as plt
 #
 # print(corr_mat.index)
 
-user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
+#user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 # numerical_df = user_info_df[numericalFeatures + ['user_id']]
 #
 # null_df = numerical_df[numerical_df['zhima_score'].isnull()]
@@ -117,10 +117,22 @@ user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 # plt.xlabel("xlabel")  # 我们设置横纵坐标的标题。
 # plt.show()
 
-province_dict_df = pd.read_excel(ROOT_DIR + 'settings/province_badrate_classification.xlsx', encoding='utf-8')
-y = 'loan_status'
-x = set(list(province_dict_df)).difference(set([y]))
-print(x)
-#dict = province_dict_df.set_index('identity_province').T.to_dict('int')['classification']
+# province_dict_df = pd.read_excel(ROOT_DIR + 'settings/province_badrate_classification.xlsx', encoding='utf-8')
+# y = 'loan_status'
+# x = set(list(province_dict_df)).difference(set([y]))
+# print(x)
+# #dict = province_dict_df.set_index('identity_province').T.to_dict('int')['classification']
+#
+# print(set(list(province_dict_df)))
 
-print(set(list(province_dict_df)))
+condition_list = ['var == 0', 'var >=1 and var <= 2', 'var == 3']
+s = 0
+x = '2'
+for condition in condition_list:
+    condition = condition.replace("var", str(x))
+    print(condition)
+    if eval(condition):
+        print('matched !')
+        print(s)
+    else:
+        s += 1

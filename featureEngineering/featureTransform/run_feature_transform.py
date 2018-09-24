@@ -18,13 +18,17 @@ class FeatureTransformRunner():
     def setData(self, df):
         self.data_df = df
 
+    #单变量衍生与交叉特征衍生
     def featureDerivation(self):
         print('feature derivation:')
         register_apply_date_interval(self.data_df, self.derivation_df)
         seemingly_abnormity_application(self.data_df, self.derivation_df)
 
         identity_city_classification(self.data_df, self.derivation_df)
+        feature_labelEncode(self.derivation_df, 'identity_city_classification')
+
         phone_city_classification(self.data_df, self.derivation_df)
+        feature_labelEncode(self.derivation_df, 'phone_city_classification')
 
         identity_province_classification(self.data_df, self.derivation_df)
 
@@ -33,10 +37,14 @@ class FeatureTransformRunner():
         br_score_classification(self.data_df, self.derivation_df)
 
 
-
+    #单变量进行值域变换,并针对部分类别变量进行label encode
     def singleFeatureTransform(self):
         job_level_combine(self.data_df)
         network_len_combine(self.data_df)
+
+        feature_labelEncode(self.data_df, 'applyDate_xunYue')
+        feature_labelEncode(self.data_df, 'registerDate_xunYue')
+        feature_labelEncode(self.data_df, 'network_len')
 
     def saveData(self, file1, file2):
 
@@ -58,7 +66,7 @@ class FeatureTransformRunner():
 
     def splitData(self, file1, file2):
 
-        #self.saveData(file1, file2)
+        self.saveData(file1, file2)
 
         merge_df = pd.concat([self.data_df, self.derivation_df], axis=1)
         featurs = [x for x in merge_df.columns if x not in ['bill_id','phone','name','identity']]

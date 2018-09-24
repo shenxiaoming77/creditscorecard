@@ -66,7 +66,6 @@ def identity_province_classification(train_df, derivation_df):
     derivation_df['identity_province_classification'] = train_df['identity_province']\
         .apply(lambda x : province_dict[x])
 
-
 def user_age_classification(train_df, derivation_df):
     derivation_df['user_age_classification'] = train_df['user_age']\
         .apply(lambda x : assign_age_classification(x))

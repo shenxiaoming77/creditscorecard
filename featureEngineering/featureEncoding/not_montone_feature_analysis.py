@@ -6,23 +6,6 @@ import matplotlib.pyplot as plt
 from  settings import  *
 from  util.scorecard_functions import *
 
-
-'''
-badrate所有不单调的类别变量:
-'auth_level',
-'network_len',
-'identity_city_classification',
-'phone_city_classification',
-'zhima_score_classification',
-'br_score_classification',
-'user_age_classification'
-'''
-
-'''
-1. 离散化程度高且无序的变量，直接用badrate进行编码
-job_level, phone_province,identity_province,occupation
-'''
-
 categoricalFeatures = FEATURE_DICT['categoricalFeatures']
 
 not_monotone_list = []
@@ -66,24 +49,38 @@ def monotone_analysis(train_data, var):
         key = item[0]
         print(item[0], '    ', item[1], '   ', count_dict[key])
 
-# for var in categoricalFeatures:
-#     if not BadRateMonotone(train_data, var, target=LABEL):
-#             not_monotone_list.append(var)
+#获取所有badrate不单调的类别变量，逐一分析是否需要进行卡方分箱合并
+for var in categoricalFeatures:
+    if not BadRateMonotone(train_data, var, target=LABEL):
+            not_monotone_list.append(var)
+
+print(not_monotone_list)
+
+
+'''
+1. 离散化程度高且无序的变量，直接用badrate进行编码，无需进一步的分箱合并，保证badrate单调性
+job_level, phone_province,identity_province,occupation
+
+2. badrate不单调并且需要卡方分箱合并的类别变量:
+'auth_level': == 0, == 1, == 2, >= 3
+'network_len': ==0, ==1, >=2
+'identity_city_classification': ==0, ==1, >=2 and <= 3, ==4, >=5
+'phone_city_classification':==0, >= 1 and <=2, ==3, ==4, >=5
+'br_score_classification':==0, >=1 and <= 2, ==3
+'user_age_classification':==0, ==1, >=2
+'''
+
+# var = 'user_age_classification'
+# #monotone_analysis(train_data, var)
 #
-# print(not_monotone_list)
-
-var = 'identity_city_classification'
-#monotone_analysis(train_data, var)
-
-print(set(train_data['identity_city_classification']))
-
-dicts, regroup = BinBadRate(train_data, var, LABEL)
-
-print('dict:')
-print(dicts)
-print('regroup:')
-print(regroup)
-
-print(regroup[var].values)
-
-visualization(var, regroup[var].values, list(regroup.bad_rate.values), x_label= var, y_label='badrate', title='title')
+# print(set(train_data[var]))
+#
+# dicts, regroup = BinBadRate(train_data, var, LABEL)
+#
+# print('dict:')
+# print(dicts)
+# print('regroup:')
+# print(regroup)
+#
+# print(regroup[var].values)
+# visualization(var, regroup[var].values, list(regroup.bad_rate.values), x_label= var, y_label='badrate', title='title')

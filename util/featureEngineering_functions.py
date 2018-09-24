@@ -34,7 +34,6 @@ def assign_city_level_classification(city_name, city_level_dict):
     flag = False
     for key in keys:
         values = list(city_level_dict[key])
-
         for value in values:
             if str(value).find(reg_city_name) >= 0:
                 return  key
@@ -42,6 +41,13 @@ def assign_city_level_classification(city_name, city_level_dict):
     if flag == False:
         print(reg_city_name)
         return  '其他'
+
+#有序的类别变量进行label encode编码
+def feature_labelEncode(df, var):
+    var_dict = LABEL_ENCODE_DICT[var]
+    df[var + '_tmp'] = df[var].apply(lambda x : var_dict[str(x)])
+    df[var] = df[var + '_tmp']
+    df.drop(var + '_tmp', inplace=True, axis = 1)
 
 #对年龄进行区间划分
 def assign_age_classification(age):
@@ -73,8 +79,7 @@ def assign_zhimaScore_classification(x):
         return  3
     elif score > 900:
         return  4
-    else:
-        return  -1
+
 
 #百融信用分
 #[300,500) 高风险，建议拒绝
@@ -83,13 +88,13 @@ def assign_zhimaScore_classification(x):
 def assign_brScore_classification(x):
     score = int(x)
     if 300 <= score < 500:
-        return 0
+        return 1
     elif 500 <= score < 550:
-        return  1
-    elif score >= 550:
         return  2
+    elif score >= 550:
+        return  3
     else:
-        return  -1
+        return  0
 
 def jobLevel_cross_applyDatehour(job, apply_hour):
     job_list = ["专业技术人员/设计师/工程师", "主任/主管/组长/初级管理", "学生", "总监/总经理/高管",

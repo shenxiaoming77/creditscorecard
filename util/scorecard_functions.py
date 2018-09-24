@@ -453,7 +453,8 @@ def MergeByCondition(x,condition_list):
     #condition_list是条件列表。满足第几个condition，就输出几
     s = 0
     for condition in condition_list:
-        if eval(str(x)+condition):
+        condition = condition.replace("var", str(x))
+        if eval(condition):
             return s
         else:
             s+=1
