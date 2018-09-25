@@ -139,9 +139,14 @@ from  util.scorecard_functions import *
 #         s += 1
 
 WOE_IV_dict = {}
-var = 'job_level_WOE'
+var = 'job_level'
+new_var = var + '_WOE'
 train_data = pd.read_excel(ROOT_DIR + 'transformed_train.xlsx', encoding = 'utf-8')
-WOE_IV_dict[var] = CalcWOE(train_data, var, LABEL)
-train_data[var] = train_data[var].map(lambda x : WOE_IV_dict[var]['WOE'][x])
 
-print(WOE_IV_dict[var])
+merged_dict = MergeBad0(train_data, var, LABEL, direction='bad')
+train_data[var] = train_data[var].map(lambda x : merged_dict[x])
+
+WOE_IV_dict[new_var] = CalcWOE(train_data, var, LABEL)
+train_data[new_var] = train_data[var].map(lambda x : WOE_IV_dict[new_var]['WOE'][x])
+
+print(WOE_IV_dict[new_var])

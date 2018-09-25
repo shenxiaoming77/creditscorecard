@@ -362,6 +362,7 @@ def CalcWOE(df, col, target):
     for k, v in WOE_dict.items():
         WOE_dict[k] = v['WOE']
     IV = regroup.apply(lambda x: (x.good_pcnt-x.bad_pcnt)*np.log(x.good_pcnt*1.0/x.bad_pcnt),axis = 1)
+    regroup.apply(lambda x:  print(x))
     IV = sum(IV)
     return {"WOE": WOE_dict, 'IV':IV}
 
