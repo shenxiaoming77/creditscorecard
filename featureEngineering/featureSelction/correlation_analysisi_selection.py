@@ -21,6 +21,9 @@ derivedFeature_data = pd.merge(derivedFeature_data, urateFeature_data, on = 'CUS
 
 class  CorrelationAnalysisSelection:
 
+    def set_data(self, df):
+        self.data_df = df
+
     #衍生特征之间的相关性计算
     def derived_feature_correlation_analysis(self, derivedFeature_data):
 
@@ -53,7 +56,6 @@ class  CorrelationAnalysisSelection:
         with open(ROOT_DIR +  'featureEngineering/WOE_IV_dict.pkl', 'rb') as f:
             WOE_IV_dict = pickle.load(f)
 
-        train_data = pd.read_csv(ROOT_DIR + 'featureEngineering/train_WOE_data.csv')
 
         '''
         1.先进行单变量分析：按IV值进行排序,过滤掉IV值过低的特征
@@ -61,6 +63,10 @@ class  CorrelationAnalysisSelection:
         high_IV = [(var, value['IV']) for var, value in WOE_IV_dict.items() if value['IV'] >= 0.02]
         #按IV值进行排序
         high_IV_sorted = sorted(high_IV, key = lambda tuple : tuple[1], reverse = True)
+
+        for item in high_IV_sorted:
+            print(item)
+        return
 
         '''
         2.进入多变量分析环节：
@@ -110,7 +116,9 @@ class  CorrelationAnalysisSelection:
 
 
 if __name__ == '__main__':
+    train_data = pd.read_excel(ROOT_DIR + 'featureEngineering/train_WOE_data.xlsx')
     analysis= CorrelationAnalysisSelection()
+    analysis.set_data(train_data)
     analysis.woe_feature_analysis()
 
 

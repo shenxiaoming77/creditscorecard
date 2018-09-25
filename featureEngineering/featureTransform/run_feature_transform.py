@@ -14,9 +14,11 @@ class FeatureTransformRunner():
 
     def loadData(self, file):
         self.data_df = pd.read_excel(file, encoding='utf-8')
+        self.derivation_df['user_id'] = self.data_df['user_id']
 
     def setData(self, df):
         self.data_df = df
+        self.derivation_df['user_id'] = self.data_df['user_id']
 
     #单变量衍生与交叉特征衍生
     def featureDerivation(self):
@@ -60,7 +62,8 @@ class FeatureTransformRunner():
 
         #self.saveData(file1, file2)
 
-        merge_df = pd.concat([self.data_df, self.derivation_df], axis=1)
+        #merge_df = pd.concat([self.data_df, self.derivation_df], axis=1)
+        merge_df = pd.merge(self.data_df, self.derivation_df, on='user_id', how='left')
         merge_df.drop(['bill_id','phone','name','identity'], axis = 1, inplace = True)
         merge_df.to_excel(ROOT_DIR + 'transformed_train.xlsx', index = None)
 
@@ -68,8 +71,9 @@ class FeatureTransformRunner():
 
         self.saveData(file1, file2)
 
-        merge_df = pd.concat([self.data_df, self.derivation_df], axis=1)
-        featurs = [x for x in merge_df.columns if x not in ['bill_id','phone','name','identity']]
+        #merge_df = pd.concat([self.data_df, self.derivation_df], axis=1)
+        merge_df = pd.merge(self.data_df, self.derivation_df, on='user_id', how='left')
+        featurs = [x for x in merge_df.columns if x not in ['loan_status','bill_id','phone','name','identity']]
         train_x, test_x, train_y, test_y = train_test_split_func(merge_df, featurs, 0.25)
         train_df = pd.concat([train_x, train_y], axis=1)
         test_df = pd.concat([test_x, test_y], axis=1)

@@ -18,6 +18,8 @@ class WOEEncoding:
         self.toRemove_list = FEATURE_DICT['toRemoveFeatures']
         self.bin_dict = []
 
+        self.badrate0_merged_dict = {}
+
         self.loadData(file)
 
     def loadData(self, file):
@@ -30,7 +32,7 @@ class WOEEncoding:
 
         #类别型变量与连续数值型变量分别进行卡方分箱与WOE编码
         self.categorical_feature_encoding()
-        return
+
         self.numerical_feature_encoding()
 
         #保存最终的WOE编码结果 以及相关特征分箱等信息，用于后续多变量分析 以及模型训练
@@ -66,34 +68,32 @@ class WOEEncoding:
         #计算WOE值
         self.compute_woe('auth_level_Bin')
         self.compute_woe('network_len_Bin')
-        self.compute_woe('network_len_Bin')
-        self.compute_woe('network_len_Bin')
-        self.compute_woe('network_len_Bin')
-        self.compute_woe('network_len_Bin')
+        self.compute_woe('identity_city_classification_Bin')
+        self.compute_woe('phone_city_classification_Bin')
+        self.compute_woe('br_score_classification_Bin')
+        self.compute_woe('user_age_classification_Bin')
 
 
     def compute_woe(self, var):
         new_var = var + '_WOE'
         self.WOE_IV_dict[new_var] = CalcWOE(self.train_data, var, LABEL)
         self.train_data[new_var] = self.train_data[var].map(lambda x : self.WOE_IV_dict[new_var]['WOE'][x])
-        print(self.WOE_IV_dict.get(new_var))
 
 
     def categorical_feature_encoding(self):
 
         not_monotone = []
 
-        #1.先对类别变量中badrate不单调的特征进行合并并且计算WOE值
+        #先对类别变量中badrate不单调的特征进行合并并且计算WOE值
         for var in self.categoricalFeatures:
             if not BadRateMonotone(self.train_data, var, target=LABEL):
                 not_monotone.append(var)
 
 
-        #无序离散变量，不需要进一步分箱合并，直接基于每个bin的badrate进行编码
+        #无序且高离散化变量，不需要进一步分箱合并，直接基于每个bin的badrate进行编码
         unordered_categorical_variable = ['job_level', 'phone_province','identity_province','occupation']
         for var in unordered_categorical_variable:
             not_monotone.remove(var)
-        print(not_monotone)
 
         '''
         badrate不单调并且需要卡方分箱合并的类别变量:
@@ -107,7 +107,17 @@ class WOEEncoding:
         #针对badrate不单调的类别特征进行处理
         self.not_monotone_feature_process(not_monotone)
 
-        #2.针对其他单调的类别型变量，检查是否有一箱的占比低于5%。 如果有，将该变量进行合并
+        #对于无序且高离散化变量，需要进一步检测每个bin是否存在零坏样本的情况，如果存在则需要先进行
+        for var in unordered_categorical_variable:
+            if existing_badrate0(self.train_data, var, LABEL):
+                merged_dict = MergeBad0(self.train_data, var, LABEL, direction='bad')
+                self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
+                self.badrate0_merged_dict[var] = merged_dict
+
+        print('badrate0 merged dict:')
+        print(self.badrate0_merged_dict)
+
+        #针对其他单调的类别型变量，检查是否有一箱的样本数量占比低于5%。 如果有，将该变量进行合并
         #根据是否存在样本数量有小于5%的bin，将特征分为small_bin_var与large_bin_var两个集合
         #依次对small_bin_var与large_bin_var两个集合中的特征进行分析处理
         small_bin_var = []
@@ -123,18 +133,19 @@ class WOEEncoding:
                     large_bin_var.append(var)
 
 
-        #2.1:针对 small_bin_var中的变量进行处理
+        #针对 small_bin_var中的变量进行处理
         print('samll bin list:')
         for i in small_bin_var:
             print(i)
 
         for var in small_bin_var:
-            self.compute_woe(var)
+            for key in var.keys():
+                print('small bin key:', str(key))
+                self.compute_woe(key)
 
 
-        #2.2:针对large_bin_var中的变量进行处理
+        #:针对large_bin_var中的变量进行处理
         #对于不需要分箱合并，原始特征的badrate就已经单调的变量直接计算WOE和IV值
-
         for var in large_bin_var:
             self.compute_woe(var)
 
@@ -176,7 +187,7 @@ class WOEEncoding:
             pickle.dump(self.WOE_IV_dict, f)
 
         #print(self.train_data.columns)
-        self.train_data.to_csv(ROOT_DIR + 'featureEngineering/train_WOE_data.csv', index=None)
+        self.train_data.to_excel(ROOT_DIR + 'featureEngineering/train_WOE_data.xlsx', index=None, encoding='utf-8')
 
         with open(ROOT_DIR + 'featureEngineering/numericalFeatures.pkl', 'wb') as f1:
             pickle.dump(self.numericalFeatures, f1)
@@ -186,6 +197,9 @@ class WOEEncoding:
 
         with open(ROOT_DIR + 'featureEngineering/bin_dict.pkl', 'wb') as f3:
             pickle.dump(self.bin_dict, f3)
+
+        with open(ROOT_DIR + 'featureEngineering/badrate0_merged_dict.pkl', 'wb') as f4:
+            pickle.dump(self.badrate0_merged_dict, f4)
 
 if __name__ == '__main__':
     woeEncoding = WOEEncoding(ROOT_DIR + 'transformed_train.xlsx')

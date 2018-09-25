@@ -8,6 +8,7 @@ import  pandas as pd
 import  numpy as np
 import  seaborn as sns
 import  matplotlib.pyplot as plt
+from  util.scorecard_functions import *
 
 # df1 = pd.read_excel(ROOT_DIR + 'settings/1.xls', encoding='gbk')
 #
@@ -125,14 +126,22 @@ import  matplotlib.pyplot as plt
 #
 # print(set(list(province_dict_df)))
 
-condition_list = ['var == 0', 'var >=1 and var <= 2', 'var == 3']
-s = 0
-x = '2'
-for condition in condition_list:
-    condition = condition.replace("var", str(x))
-    print(condition)
-    if eval(condition):
-        print('matched !')
-        print(s)
-    else:
-        s += 1
+# condition_list = ['var == 0', 'var >=1 and var <= 2', 'var == 3']
+# s = 0
+# x = '2'
+# for condition in condition_list:
+#     condition = condition.replace("var", str(x))
+#     print(condition)
+#     if eval(condition):
+#         print('matched !')
+#         print(s)
+#     else:
+#         s += 1
+
+WOE_IV_dict = {}
+var = 'job_level_WOE'
+train_data = pd.read_excel(ROOT_DIR + 'transformed_train.xlsx', encoding = 'utf-8')
+WOE_IV_dict[var] = CalcWOE(train_data, var, LABEL)
+train_data[var] = train_data[var].map(lambda x : WOE_IV_dict[var]['WOE'][x])
+
+print(WOE_IV_dict[var])
