@@ -391,6 +391,9 @@ def register_apply_date_interval_analysis():
     bin_count = groupby_data.count()
     bin_badstatus_sum = groupby_data.sum()
 
+#查看类别变量的bin的样本占比情况,对于样本量占比特别小的bin 需要合并到其他bin中
+
+
 if __name__ == '__main__':
     #null_counts_analysis()
 

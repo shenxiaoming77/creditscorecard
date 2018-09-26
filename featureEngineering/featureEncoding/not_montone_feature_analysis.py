@@ -58,7 +58,7 @@ print(not_monotone_list)
 
 #针对离散化程度高且无序的变量，需要观察每个bin的badrate分布情况，对于极端分布
 #job_level, phone_province两个特征存在零坏样本的bin
-def badrate0_analysis(df, col, target):
+def badrate0_analysis(df, col, target, direction):
     print(col)
     total = df.groupby([col])[target].count()
     total = pd.DataFrame({'total': total})
@@ -71,10 +71,10 @@ def badrate0_analysis(df, col, target):
     regroup['good'] = regroup['total'] - regroup['bad']
     G = N - B
 
-    result = regroup['bad'].map(lambda x: (str(x == 0)))
+    result = regroup[direction].map(lambda x: (str(x == 0)))
     print(result)
     if 'True' in set(result):
-        print('badrate0 is true')
+        print(direction + 'rate0 is true')
 
 
 
@@ -108,13 +108,14 @@ job_level, phone_province,identity_province,occupation
 # visualization(var, regroup[var].values, list(regroup.bad_rate.values), x_label= var, y_label='badrate', title='title')
 
 target = 'loan_status'
-features = ['job_level', 'phone_province','identity_province','occupation']
+#features = ['job_level', 'phone_province','identity_province','occupation']
+features = ['zhima_score_classification']
+direction = 'bad'
 for var in features:
-    badrate0_analysis(train_data, var, target)
+    badrate0_analysis(train_data, var, target, direction)
 
-result = MergeBad0(train_data, 'job_level', LABEL, direction='bad')
+result = MergeBad0(train_data, 'zhima_score_classification', LABEL, direction)
 print(result)
 
-train_data['job_level'] = train_data['job_level'].map(lambda x : result[x])
-print(train_data['job_level'])
-print(train_data.columns)
+train_data['zhima_score_classification'] = train_data['zhima_score_classification'].map(lambda x : result[x])
+print(train_data['zhima_score_classification'])

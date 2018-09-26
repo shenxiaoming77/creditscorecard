@@ -19,6 +19,7 @@ class WOEEncoding:
         self.bin_dict = []
 
         self.badrate0_merged_dict = {}
+        self.goodrate0_merged_dict = {}
 
         self.loadData(file)
 
@@ -96,7 +97,7 @@ class WOEEncoding:
             not_monotone.remove(var)
 
         '''
-        badrate不单调并且需要卡方分箱合并的类别变量:
+         badrate不单调并且需要卡方分箱合并的类别变量:
         'auth_level': == 0, == 1, == 2, >= 3
         'network_len': ==0, ==1, >=2
         'identity_city_classification': ==0, ==1, >=2 and <= 3, ==4, >=5
@@ -107,15 +108,25 @@ class WOEEncoding:
         #针对badrate不单调的类别特征进行处理
         self.not_monotone_feature_process(not_monotone)
 
-        #对于无序且高离散化变量，需要进一步检测每个bin是否存在零坏样本的情况，如果存在则需要先进行
+        #1. 对于无序且高离散化变量，需要进一步检测每个bin是否存在零坏样本的情况，如果存在则需要进行merge
         for var in unordered_categorical_variable:
-            if existing_badrate0(self.train_data, var, LABEL):
+            if existing_badrate0(self.train_data, var, LABEL, 'bad'):
                 merged_dict = MergeBad0(self.train_data, var, LABEL, direction='bad')
                 self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
                 self.badrate0_merged_dict[var] = merged_dict
 
         print('badrate0 merged dict:')
         print(self.badrate0_merged_dict)
+
+        #2. 对于无序且高度离散化变量，在零坏样本检测之后，需要进行零好样本的bin检测，如果存在也需要进行merge
+        for var in unordered_categorical_variable:
+            if existing_badrate0(self.train_data, var, LABEL, 'good'):
+                merged_dict = MergeBad0(self.train_data, var, LABEL, direction='good')
+                self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
+                self.goodrate0_merged_dict[var] = merged_dict
+
+        print('goodrate0 merged dict:')
+        print(self.goodrate0_merged_dict)
 
         #针对其他单调的类别型变量，检查是否有一箱的样本数量占比低于5%。 如果有，将该变量进行合并
         #根据是否存在样本数量有小于5%的bin，将特征分为small_bin_var与large_bin_var两个集合
@@ -200,6 +211,9 @@ class WOEEncoding:
 
         with open(ROOT_DIR + 'featureEngineering/badrate0_merged_dict.pkl', 'wb') as f4:
             pickle.dump(self.badrate0_merged_dict, f4)
+
+        with open(ROOT_DIR + 'featureEngineering/goodrate0_merged_dict.pkl', 'wb') as f5:
+            pickle.dump(self.goodrate0_merged_dict, f5)
 
 if __name__ == '__main__':
     woeEncoding = WOEEncoding(ROOT_DIR + 'transformed_train.xlsx')

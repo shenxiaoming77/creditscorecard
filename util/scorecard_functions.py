@@ -391,8 +391,10 @@ def BadRateMonotone(df, sortByVar, target,special_attribute = []):
     else:
         return True
 
-
-def MergeBad0(df,col,target, direction='bad'):
+#包含检验0％或者100%坏样本率
+#如果是合并0坏样本率的组，则跟最小的非0坏样本率的组进行合并
+#如果是合并0好样本样本率的组，则跟最小的非0好样本率的组进行合并
+def MergeBad0(df,col,target, direction):
     '''
      :param df: 包含检验0％或者100%坏样本率
      :param col: 分箱后的变量或者类别型变量。检验其中是否有一组或者多组没有坏样本或者没有好样本。如果是，则需要进行合并
@@ -623,8 +625,9 @@ def network_len_combine_func(networkLen):
         return  length
 
 
-#判断该变量是否存在零坏样本的情况，即某个bin的badrate为0，若存在，该特征需要进行mergeBate0操作
-def existing_badrate0(df, col, target):
+#判断该变量是否存在零坏样本或者零好样本的情况，即某个bin的badrate为0或者goodrate为0
+#若存在，该特征需要进行mergeBate0操作
+def existing_badrate0(df, col, target, direction):
     print(col)
     total = df.groupby([col])[target].count()
     total = pd.DataFrame({'total': total})
@@ -637,7 +640,7 @@ def existing_badrate0(df, col, target):
     regroup['good'] = regroup['total'] - regroup['bad']
     G = N - B
 
-    result = regroup['bad'].map(lambda x: (str(x == 0)))
+    result = regroup[direction].map(lambda x: (str(x == 0)))
     if 'True' in set(result):
         return  True
     else:
