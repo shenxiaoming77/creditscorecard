@@ -33,7 +33,7 @@ class WOEEncoding:
 
         #类别型变量与连续数值型变量分别进行卡方分箱与WOE编码
         self.categorical_feature_encoding()
-
+        return
         self.numerical_feature_encoding()
 
         #保存最终的WOE编码结果 以及相关特征分箱等信息，用于后续多变量分析 以及模型训练
@@ -105,25 +105,27 @@ class WOEEncoding:
         'br_score_classification':==0, >=1 and <= 2, ==3
         'user_age_classification':==0, ==1, >=2
         '''
-        #针对badrate不单调的类别特征进行处理
+        #1. 针对badrate不单调的类别特征进行处理
         self.not_monotone_feature_process(not_monotone)
 
-        #1. 对于无序且高离散化变量，需要进一步检测每个bin是否存在零坏样本的情况，如果存在则需要进行merge
-        for var in unordered_categorical_variable:
-            if existing_badrate0(self.train_data, var, LABEL, 'bad'):
-                merged_dict = MergeBad0(self.train_data, var, LABEL, direction='bad')
-                self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
-                self.badrate0_merged_dict[var] = merged_dict
+        #2. 对于其他类别变量，需要进一步检测每个bin是否存在零坏样本的情况，如果存在则需要进行merge
+        for var in self.categoricalFeatures:
+            if var not in not_monotone:
+                if existing_badrate0(self.train_data, var, LABEL, 'bad'):
+                    merged_dict = MergeBad0(self.train_data, var, LABEL, direction='bad')
+                    self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
+                    self.badrate0_merged_dict[var] = merged_dict
 
         print('badrate0 merged dict:')
         print(self.badrate0_merged_dict)
 
-        #2. 对于无序且高度离散化变量，在零坏样本检测之后，需要进行零好样本的bin检测，如果存在也需要进行merge
-        for var in unordered_categorical_variable:
-            if existing_badrate0(self.train_data, var, LABEL, 'good'):
-                merged_dict = MergeBad0(self.train_data, var, LABEL, direction='good')
-                self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
-                self.goodrate0_merged_dict[var] = merged_dict
+        #3. 对于其他类别变量，在零坏样本检测之后，需要进行零好样本的bin检测，如果存在也需要进行merge
+        for var in self.categoricalFeatures:
+            if var not in not_monotone:
+                if existing_badrate0(self.train_data, var, LABEL, 'good'):
+                    merged_dict = MergeBad0(self.train_data, var, LABEL, direction='good')
+                    self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
+                    self.goodrate0_merged_dict[var] = merged_dict
 
         print('goodrate0 merged dict:')
         print(self.goodrate0_merged_dict)
@@ -151,9 +153,7 @@ class WOEEncoding:
 
         for var in small_bin_var:
             for key in var.keys():
-                print('small bin key:', str(key))
                 self.compute_woe(key)
-
 
         #:针对large_bin_var中的变量进行处理
         #对于不需要分箱合并，原始特征的badrate就已经单调的变量直接计算WOE和IV值
@@ -194,11 +194,12 @@ class WOEEncoding:
 
         #将所有经过WOE编码的新特征及相关WOE,IV值保存在本地
         with open(ROOT_DIR + 'featureEngineering/WOE_IV_dict.pkl', 'wb') as f:
-            print(self.WOE_IV_dict)
+            print(self.WOE_IV_dict.keys())
             pickle.dump(self.WOE_IV_dict, f)
 
         #print(self.train_data.columns)
         self.train_data.to_excel(ROOT_DIR + 'featureEngineering/train_WOE_data.xlsx', index=None, encoding='utf-8')
+
 
         with open(ROOT_DIR + 'featureEngineering/numericalFeatures.pkl', 'wb') as f1:
             pickle.dump(self.numericalFeatures, f1)

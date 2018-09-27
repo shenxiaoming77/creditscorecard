@@ -144,10 +144,10 @@ var = 'zhima_score_classification'
 new_var = var + '_WOE'
 train_data = pd.read_excel(ROOT_DIR + 'transformed_train.xlsx', encoding = 'utf-8')
 
-# merged_dict = MergeBad0(train_data, var, LABEL, direction='bad')
-# train_data[var] = train_data[var].map(lambda x : merged_dict[x])
-# print(merged_dict)
-# print(set(train_data[var]))
+merged_dict = MergeBad0(train_data, var, LABEL, direction='bad')
+train_data[var] = train_data[var].map(lambda x : merged_dict[x])
+print(merged_dict)
+print(set(train_data[var]))
 
 WOE_IV_dict[new_var] = CalcWOE(train_data, var, LABEL)
 train_data[new_var] = train_data[var].map(lambda x : WOE_IV_dict[new_var]['WOE'][x])

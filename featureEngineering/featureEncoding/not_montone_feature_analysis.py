@@ -49,12 +49,7 @@ def monotone_analysis(train_data, var):
         key = item[0]
         print(item[0], '    ', item[1], '   ', count_dict[key])
 
-#获取所有badrate不单调的类别变量，逐一分析是否需要进行卡方分箱合并
-for var in categoricalFeatures:
-    if not BadRateMonotone(train_data, var, target=LABEL):
-            not_monotone_list.append(var)
 
-print(not_monotone_list)
 
 #针对离散化程度高且无序的变量，需要观察每个bin的badrate分布情况，对于极端分布
 #job_level, phone_province两个特征存在零坏样本的bin
@@ -92,6 +87,15 @@ job_level, phone_province,identity_province,occupation
 'user_age_classification':==0, ==1, >=2
 '''
 
+#获取所有badrate不单调的类别变量，逐一分析是否需要进行卡方分箱合并
+for var in categoricalFeatures:
+    print(var)
+    if not BadRateMonotone(train_data, var, target=LABEL):
+            not_monotone_list.append(var)
+
+print(not_monotone_list)
+
+
 # var = 'user_age_classification'
 # #monotone_analysis(train_data, var)
 #
@@ -107,15 +111,15 @@ job_level, phone_province,identity_province,occupation
 # print(regroup[var].values)
 # visualization(var, regroup[var].values, list(regroup.bad_rate.values), x_label= var, y_label='badrate', title='title')
 
-target = 'loan_status'
-#features = ['job_level', 'phone_province','identity_province','occupation']
-features = ['zhima_score_classification']
-direction = 'bad'
-for var in features:
-    badrate0_analysis(train_data, var, target, direction)
-
-result = MergeBad0(train_data, 'zhima_score_classification', LABEL, direction)
-print(result)
-
-train_data['zhima_score_classification'] = train_data['zhima_score_classification'].map(lambda x : result[x])
-print(train_data['zhima_score_classification'])
+# target = 'loan_status'
+# #features = ['job_level', 'phone_province','identity_province','occupation']
+# features = ['zhima_score_classification']
+# direction = 'bad'
+# for var in features:
+#     badrate0_analysis(train_data, var, target, direction)
+#
+# result = MergeBad0(train_data, 'zhima_score_classification', LABEL, direction)
+# print(result)
+#
+# train_data['zhima_score_classification'] = train_data['zhima_score_classification'].map(lambda x : result[x])
+# print(train_data['zhima_score_classification'])

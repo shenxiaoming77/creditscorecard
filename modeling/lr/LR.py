@@ -17,16 +17,16 @@ class LogisticRegressionRunner:
         with open(ROOT_DIR + 'featureEngineering/featuresInModel.pkl', 'rb') as f:
             self.featuresInModel = pickle.load(f)
 
-        train_data = pd.read_csv(ROOT_DIR + 'featureEngineering/train_WOE_data.csv')[self.featuresInModel + ['label']]
+        train_data = pd.read_excel(ROOT_DIR + 'featureEngineering/train_WOE_data.xlsx')[self.featuresInModel + [LABEL]]
 
-        self.y_train = train_data['label']
-        self.X_train = train_data.drop(['label'], axis = 1)
+        self.y_train = train_data[LABEL]
+        self.X_train = train_data.drop([LABEL], axis = 1)
         del train_data
 
     def ks_auc_eval(self, result_df):
 
-        ks = KS(result_df, 'pred', 'label')
-        auc = roc_auc_score(result_df['label'], result_df['pred'])  #AUC = 0.73
+        ks = KS(result_df, 'pred', LABEL)
+        auc = roc_auc_score(result_df[LABEL], result_df['pred'])  #AUC = 0.73
         #{'AUC': 0.83644931044825688, 'KS': 0.59816049348012412}
         result = {}
         result['ks'] = ks
@@ -46,7 +46,7 @@ class LogisticRegressionRunner:
             logit_result = logit.fit()
 
             result_df = pd.DataFrame()
-            result_df['label'] = self.y_train
+            result_df[LABEL] = self.y_train
             result_df['pred'] = logit_result.predict(X)
 
             print(result_df)
@@ -69,7 +69,7 @@ class LogisticRegressionRunner:
             probas = logit_result.predict_proba(X)[:, 1]
 
             result_df = pd.DataFrame()
-            result_df['label'] = self.y_train
+            result_df[LABEL] = self.y_train
             result_df['pred'] = probas
 
             print(result_df)

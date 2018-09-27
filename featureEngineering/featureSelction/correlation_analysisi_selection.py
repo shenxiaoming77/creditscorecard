@@ -8,16 +8,6 @@ import pickle
 
 from  settings import  *
 
-'''
-orginal_data = pd.read_csv(ROOT_DIR + 'trainData.csv', header = None)
-delqFeature_data = pd.read_csv(ROOT_DIR + 'featureEngineering/delqFeatures.csv')
-paymentFeature_data = pd.read_csv(ROOT_DIR + 'featureEngineering/paymentFeatures.csv')
-urateFeature_data = pd.read_csv(ROOT_DIR + 'featureEngineering/urateFeatures.csv')
-
-derivedFeature_data = pd.merge(delqFeature_data, paymentFeature_data, on='CUST_ID', how='left')
-derivedFeature_data = pd.merge(derivedFeature_data, urateFeature_data, on = 'CUST_ID', how = 'left')
-'''
-
 
 class  CorrelationAnalysisSelection:
 
@@ -56,6 +46,9 @@ class  CorrelationAnalysisSelection:
         with open(ROOT_DIR +  'featureEngineering/WOE_IV_dict.pkl', 'rb') as f:
             WOE_IV_dict = pickle.load(f)
 
+        print('WOE FEATURES:')
+        print(WOE_IV_dict.keys())
+        return
 
         '''
         1.先进行单变量分析：按IV值进行排序,过滤掉IV值过低的特征
