@@ -394,7 +394,7 @@ def BadRateMonotone(df, sortByVar, target,special_attribute = []):
 #包含检验0％或者100%坏样本率
 #如果是合并0坏样本率的组，则跟最小的非0坏样本率的组进行合并
 #如果是合并0好样本样本率的组，则跟最小的非0好样本率的组进行合并
-def MergeBad0(df,col,target, direction):
+def MergeBad0(df,col,target, direction = 'bad'):
     '''
      :param df: 包含检验0％或者100%坏样本率
      :param col: 分箱后的变量或者类别型变量。检验其中是否有一组或者多组没有坏样本或者没有好样本。如果是，则需要进行合并
