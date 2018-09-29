@@ -7,8 +7,7 @@ import  pickle
 import  seaborn as sns
 
 from  settings import  *
-
-from  util.featureEngineering_functions import *
+from util.scorecard_functions import *
 
 user_info_df = pd.read_excel(ROOT_DIR + 'user_info.xlsx', encoding='utf-8')
 
@@ -55,7 +54,7 @@ def null_counts_analysis():
 def zhima_score_corrcoef_analysis():
 
     user_info_df.fillna(-1, inplace = True)
-    numerical_data = user_info_df[numericalFeatures]
+    numerical_data = user_info_df[FEATURE_DICT['numericalFeatures']]
 
     x = 'zhima_score'
 
@@ -64,7 +63,7 @@ def zhima_score_corrcoef_analysis():
     zhima_score与auth_level, company_college_length 这两个连续变量关联度较高
     '''
     corrcoef_dict = {}
-    for y in numericalFeatures:
+    for y in FEATURE_DICT['numericalFeatures']:
         print(y)
         if x != y:
             y_data = numerical_data[y].astype('int')
@@ -98,7 +97,7 @@ def zhima_score_missing_analysis():
 
 #原始连续特征之间的相关性热力图分析
 def origin_numericalFeature_correlation_analysis():
-    numerical_df = user_info_df[numericalFeatures]
+    numerical_df = user_info_df[FEATURE_DICT['numericalFeatures']]
     numerical_df.fillna(-1, inplace = True)
 
     corr_mat = numerical_df.corr()
@@ -370,7 +369,29 @@ def outlier_analysis():
     #plt.show()
 
 
+#关联交叉分析: 注册时间与申请时间之间的时间间隔的badrate分布情况
+def register_apply_date_interval_analysis():
+    length = len(user_info_df['apply_date'])
+    apply_date = user_info_df['apply_date']
+    register_date = user_info_df['register_date']
 
+    df = pd.DataFrame()
+    df['user_id'] = user_info_df['user_id']
+    df['loan_status'] = user_info_df['loan_status']
+
+    date_interval = []
+    for i in range(length):
+        date1 = register_date[i]
+        date2 = apply_date[i]
+        date_interval.append(days(str(date2), str(date1)))
+
+    df['interval'] = date_interval
+
+    groupby_data = df.groupby('interval')
+    bin_count = groupby_data.count()
+    bin_badstatus_sum = groupby_data.sum()
+
+#查看类别变量的bin的样本占比情况,对于样本量占比特别小的bin 需要合并到其他bin中
 
 
 if __name__ == '__main__':

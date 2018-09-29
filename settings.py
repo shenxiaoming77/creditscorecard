@@ -60,6 +60,7 @@ FEATURE_DICT = {
                      'm12_loan_offer_count',
                      'm12_repay_fail_count',
                      'm12_overdue_count',
+                     'register_apply_date_interval',
                      'm12_repay_remind_count'
                 ],
 #类别型变量
@@ -78,7 +79,10 @@ FEATURE_DICT = {
                        'zhima_score_classification',
                        'br_score_classification',
                        'user_age_classification',
-                       'identity_province_classification'
+                       'identity_province_classification',
+
+                       'seemingly_abnormity_application'
+
                     ],
 
 'toRemoveFeatures' :

@@ -3,6 +3,9 @@
 import numpy as np
 import pandas as pd
 from  sklearn.metrics import  roc_auc_score
+from  settings import  *
+import  datetime
+from  math import  isnan
 
 def SplitData(df, col, numOfSplit, special_attribute=[]):
     '''
@@ -354,11 +357,12 @@ def CalcWOE(df, col, target):
     G = N - B
     regroup['bad_pcnt'] = regroup['bad'].map(lambda x: x*1.0/B)
     regroup['good_pcnt'] = regroup['good'].map(lambda x: x * 1.0 / G)
-    regroup['WOE'] = regroup.apply(lambda x: np.log(x.good_pcnt*1.0/x.bad_pcnt),axis = 1)
+    regroup['WOE'] = regroup.apply(lambda x: np.log(x.good_pcnt * 1.0 /x.bad_pcnt),axis = 1)
     WOE_dict = regroup[[col,'WOE']].set_index(col).to_dict(orient='index')
     for k, v in WOE_dict.items():
         WOE_dict[k] = v['WOE']
     IV = regroup.apply(lambda x: (x.good_pcnt-x.bad_pcnt)*np.log(x.good_pcnt*1.0/x.bad_pcnt),axis = 1)
+    regroup.apply(lambda x:  print(x))
     IV = sum(IV)
     return {"WOE": WOE_dict, 'IV':IV}
 
@@ -387,8 +391,10 @@ def BadRateMonotone(df, sortByVar, target,special_attribute = []):
     else:
         return True
 
-
-def MergeBad0(df,col,target, direction='bad'):
+#包含检验0％或者100%坏样本率
+#如果是合并0坏样本率的组，则跟最小的非0坏样本率的组进行合并
+#如果是合并0好样本样本率的组，则跟最小的非0好样本率的组进行合并
+def MergeBad0(df,col,target, direction = 'bad'):
     '''
      :param df: 包含检验0％或者100%坏样本率
      :param col: 分箱后的变量或者类别型变量。检验其中是否有一组或者多组没有坏样本或者没有好样本。如果是，则需要进行合并
@@ -489,3 +495,171 @@ def ks_auc_eval(result_df):
     result['ks'] = ks
     result['auc'] = auc
     return  result
+
+def loadFeatures(file):
+
+    lines = []
+    try:
+        with open(file) as f:
+            lines_object = f.readlines()
+
+        for object in lines_object:
+            lines.append(object.strip())
+
+    finally:
+        return  lines
+
+
+
+#划定城市的等级，确定属于哪个层级
+def assign_city_level_classification(city_name, city_level_dict):
+    print(str(city_name))
+    if str(city_name).find('nan') >= 0:
+        return  '其他'
+
+    reg_city_name = city_name.replace("市", "")
+
+    keys = city_level_dict.keys()
+    flag = False
+    for key in keys:
+        values = list(city_level_dict[key])
+        for value in values:
+            if str(value).find(reg_city_name) >= 0:
+                return  key
+
+    if flag == False:
+        print(reg_city_name)
+        return  '其他'
+
+#有序的类别变量进行label encode编码
+def feature_labelEncode(df, var):
+    var_dict = LABEL_ENCODE_DICT[var]
+    df[var + '_tmp'] = df[var].apply(lambda x : var_dict[str(x)])
+    df[var] = df[var + '_tmp']
+    df.drop(var + '_tmp', inplace=True, axis = 1)
+
+#对年龄进行区间划分
+def assign_age_classification(age):
+    x = int(age)
+    if 18<= x <=20:
+        return 0
+    elif 20< x <=35:
+        return 1
+    elif 35< x <=50:
+        return 2
+    elif 50< x <=60:
+        return 3
+
+#芝麻信用分等级划分
+#第一级：300分~500分
+#第二级：500分~600分
+#第三级：600分~700分
+#第四级：700分~800分
+#第五级：800分~950分
+def assign_zhimaScore_classification(x):
+    score = int(x)
+    print('score:', score)
+    if  score <= 500:
+        return  0
+    elif 500 < score <= 600:
+        return 1
+    elif 600 < score <= 700:
+        return  2
+    elif 700 < score <= 800:
+        return  3
+    elif score > 800:
+        return  4
+
+
+#百融信用分
+#[300,500) 高风险，建议拒绝
+#[500,550) 中风险，建议关注
+#[550,1000] 低风险风险，建议通过
+def assign_brScore_classification(x):
+    score = int(x)
+    if 300 <= score < 500:
+        return 1
+    elif 500 <= score < 550:
+        return  2
+    elif score >= 550:
+        return  3
+    else:
+        return  0
+
+def jobLevel_cross_applyDatehour(job, apply_hour):
+    job_list = ["专业技术人员/设计师/工程师", "主任/主管/组长/初级管理", "学生", "总监/总经理/高管",
+                "普通员工","经理/中级管理","销售人员"]
+    hour = int(apply_hour)
+    if job in job_list and hour >= 0 and hour <= 6:
+        return  1
+    else:
+        return  0
+
+def days(str1,str2):
+    date1=datetime.datetime.strptime(str1[0:10],"%Y-%m-%d")
+    date2=datetime.datetime.strptime(str2[0:10],"%Y-%m-%d")
+    num =(date1-date2).days
+    return num
+
+
+
+def job_level_combine_func(job_level):
+    if job_level == "主管":
+        return  "主任/主管/组长/初级管理"
+    elif job_level == "总监" or job_level == "总经理":
+        return "总监/总经理/高管"
+    elif job_level == "经理":
+        return  "经理/中级管理"
+    else:
+        return  job_level
+
+def network_len_combine_func(networkLen):
+    length = str(networkLen)
+    if length == '(3,6]':
+        return  '(0,6]'
+    elif length == '6':
+        return  '(0,6]'
+    elif length == '未查得':
+        return  'missing'
+    else:
+        return  length
+
+
+#判断该变量是否存在零坏样本或者零好样本的情况，即某个bin的badrate为0或者goodrate为0
+#若存在，该特征需要进行mergeBate0操作
+def existing_badrate0(df, col, target, direction):
+    print(col)
+    total = df.groupby([col])[target].count()
+    total = pd.DataFrame({'total': total})
+    bad = df.groupby([col])[target].sum()
+    bad = pd.DataFrame({'bad': bad})
+    regroup = total.merge(bad, left_index=True, right_index=True, how='left')
+    regroup.reset_index(level=0, inplace=True)
+    N = sum(regroup['total'])
+    B = sum(regroup['bad'])
+    regroup['good'] = regroup['total'] - regroup['bad']
+    G = N - B
+
+    result = regroup[direction].map(lambda x: (str(x == 0)))
+    if 'True' in set(result):
+        return  True
+    else:
+        return  False
+
+
+if __name__ == '__main__':
+    #assign_city_level_bin('杭州市')
+    # with open(ROOT_DIR + 'settings/city_classification.pkl', 'rb') as file:
+    #     city_level_dict = pickle.load(file)
+    # print(city_level_dict)
+    # print(assign_city_level_bin('null', city_level_dict))
+
+    train_df = pd.read_excel(ROOT_DIR + 'train.xlsx', encoding = 'utf-8')
+    length = len(train_df['apply_date'])
+
+
+    for i in range(length):
+        date1 = list(train_df['register_date'])[i]
+        date2 = list(train_df['apply_date'])[i]
+
+        print(days(str(date2), str(date1)))

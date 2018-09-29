@@ -2,9 +2,9 @@
 
 import  pandas as pd
 import  numpy as np
-
+import  pickle
 from  settings import  *
-from  util.featureEngineering_functions import *
+from  util.scorecard_functions import *
 
 
 '''
@@ -13,8 +13,8 @@ register_apply_date_interval
 '''
 def register_apply_date_interval(train_df, derivation_df):
     length = len(train_df['apply_date'])
-    apply_date = list(train_df['apply_date'])
-    register_date = list(train_df['register_date'])
+    apply_date = train_df['apply_date']
+    register_date = train_df['register_date']
 
     date_interval = []
     for i in range(length):
@@ -81,7 +81,7 @@ def zhima_score_classification(train_df, derivation_df):
 if __name__ == '__main__':
     train_df = pd.read_excel(ROOT_DIR + 'preProcessed_user_info.xlsx', encoding='utf-8')
     derivation_df = pd.DataFrame()
-    derivation_df['user_id'] = list(train_df['user_id'])
+    derivation_df['user_id'] = train_df['user_id']
 
     # register_apply_date_interval(train_df, derivation_df)
     # seemingly_abnormity_application(train_df, derivation_df)
@@ -89,8 +89,9 @@ if __name__ == '__main__':
     #identity_city_classification(train_df, derivation_df)
     #phone_city_classification(train_df, derivation_df)
 
-    identity_province_classification(train_df, derivation_df)
+    #identity_province_classification(train_df, derivation_df)
 
-    print(derivation_df)
+    zhima_score_classification(train_df, derivation_df)
+    print(set(derivation_df['zhima_score_classification']))
 
 

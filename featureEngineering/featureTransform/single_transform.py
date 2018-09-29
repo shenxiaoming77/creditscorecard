@@ -2,7 +2,7 @@
 
 import  pandas as pd
 import  numpy as np
-from  util.featureEngineering_functions import *
+from  util.scorecard_functions import *
 
 #job_level中的几个类别特征值合并到对应的大类当中
 #降低特征值的冗余
@@ -14,6 +14,7 @@ from  util.featureEngineering_functions import *
 def job_level_combine(df):
     df['job_level'] = df['job_level'].apply(lambda x : job_level_combine_func(x))
     print(set(df['job_level']))
+    print(len(set(df['job_level'])))
 
 #network_len中的几个时间段存在重合，进行合并
 def network_len_combine(df):
@@ -21,7 +22,8 @@ def network_len_combine(df):
 
 if __name__ == '__main__':
     user_info_df = pd.read_excel(ROOT_DIR + 'preProcessed_user_info.xlsx', encoding='utf-8')
-    #job_level_combine(user_info_df)
-    network_len_combine(user_info_df)
-    print(set(user_info_df['network_len']))
+    job_level_combine(user_info_df)
+    #network_len_combine(user_info_df)
+    #print(set(user_info_df['network_len']))
+
 
