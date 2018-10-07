@@ -152,15 +152,9 @@ class WOEEncoding:
             print(i)
 
         for var in small_bin_var:
-<<<<<<< HEAD
             for key, value in var.items():
                 print(key)
                 self.compute_woe(key)
-
-=======
-            for key in var.keys():
-                self.compute_woe(key)
->>>>>>> 4f30ccb0063cea9f4f2b228a1138bcce7b860427
 
         #:针对large_bin_var中的变量进行处理
         #对于不需要分箱合并，原始特征的badrate就已经单调的变量直接计算WOE和IV值
@@ -199,14 +193,14 @@ class WOEEncoding:
 
     def save(self):
 
+        #print(self.train_data.columns)
+        self.train_data.to_excel(ROOT_DIR + 'featureEngineering/train_WOE_data.xlsx',
+                                 index=None, encoding='utf-8')
+
         #将所有经过WOE编码的新特征及相关WOE,IV值保存在本地
         with open(ROOT_DIR + 'featureEngineering/WOE_IV_dict.pkl', 'wb') as f:
             print(self.WOE_IV_dict.keys())
             pickle.dump(self.WOE_IV_dict, f)
-
-        #print(self.train_data.columns)
-        self.train_data.to_excel(ROOT_DIR + 'featureEngineering/train_WOE_data.xlsx', index=None, encoding='utf-8')
-
 
         with open(ROOT_DIR + 'featureEngineering/numericalFeatures.pkl', 'wb') as f1:
             pickle.dump(self.numericalFeatures, f1)

@@ -50,7 +50,7 @@ if __name__ == '__main__':
     #predictor = LogisticRegressionPredictor('statsmodels')
     predictor = LogisticRegressionPredictor('sklearn')
     test_df = pd.read_csv(ROOT_DIR + 'testData.csv')
-    label = test_df['label']
+    label = test_df[LABEL]
     predict_df = test_df.drop(['CUST_ID', 'label'], axis = 1)
 
     pred = predictor.predict(predict_df)
@@ -64,9 +64,9 @@ if __name__ == '__main__':
     ks_auc = ks_auc_eval(result_df)
     print(ks_auc)
 
-    BasePoint, PDO = 500,50
-    result_df['score'] = result_df['pred'].apply(lambda x: Prob2Score(x, BasePoint, PDO))
-    print(result_df)
-    plt.hist(result_df['score'],bins=100)
-    plt.show()
+    # BasePoint, PDO = 500,50
+    # result_df['score'] = result_df['pred'].apply(lambda x: Prob2Score(x, BasePoint, PDO))
+    # print(result_df)
+    # plt.hist(result_df['score'],bins=100)
+    # plt.show()
 

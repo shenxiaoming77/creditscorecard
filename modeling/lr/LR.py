@@ -26,8 +26,7 @@ class LogisticRegressionRunner:
     def ks_auc_eval(self, result_df):
 
         ks = KS(result_df, 'pred', LABEL)
-        auc = roc_auc_score(result_df[LABEL], result_df['pred'])  #AUC = 0.73
-        #{'AUC': 0.83644931044825688, 'KS': 0.59816049348012412}
+        auc = roc_auc_score(result_df[LABEL], result_df['pred'])
         result = {}
         result['ks'] = ks
         result['auc'] = auc
