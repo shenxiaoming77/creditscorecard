@@ -17,10 +17,11 @@ class PredictionDataGenerator:
 
         with open(ROOT_DIR + 'featureEngineering/bin_dict.pkl', 'rb') as f3:
             self.bin_dict = pickle.load(f3)
-            print(self.bin_dict)
 
         with open(ROOT_DIR + 'featureEngineering/featuresInModel.pkl', 'rb') as f4:
             self.featuresInModel = pickle.load(f4)
+            print('features in Model:')
+            print(self.featuresInModel)
 
         with open(ROOT_DIR + 'featureEngineering/WOE_IV_dict.pkl', 'rb') as f5:
             self.WOE_IV_dict = pickle.load(f5)
@@ -31,59 +32,6 @@ class PredictionDataGenerator:
         with open(ROOT_DIR + 'featureEngineering/goodrate0_merged_dict.pkl', 'rb') as f7:
             self.goodrate0_merged_dict = pickle.load(f7)
 
-
-    def data_generate(self, predict_df):
-
-        #1. 先生成所需要的衍生特征的原始数据
-        # predict_df['maxDelqL1M'] = predict_df.apply(lambda x: self.delqFeatureExtractor.DelqFeatures(x,1,'max delq'),axis=1)
-        # predict_df['maxDelqL3M'] = predict_df.apply(lambda x: self.delqFeatureExtractor.DelqFeatures(x,3,'max delq'),axis=1)
-        #
-        # predict_df['M0FreqL3M'] = predict_df.apply(lambda x: self.delqFeatureExtractor.DelqFeatures(x,3,'M0 times'),axis=1)
-        # predict_df['M1FreqL6M'] = predict_df.apply(lambda x: self.delqFeatureExtractor.DelqFeatures(x, 6, 'M1 times'), axis=1)
-        # predict_df['M2FreqL3M'] = predict_df.apply(lambda x: self.delqFeatureExtractor.DelqFeatures(x, 3, 'M2 times'), axis=1)
-        #
-        # predict_df['avgUrateL1M'] = predict_df.apply(lambda x: self.urateFeaturesExtractor.UrateFeatures(x,1, 'mean utilization rate'),axis=1)
-        # predict_df['avgUrateL3M'] = predict_df.apply(lambda x: self.urateFeaturesExtractor.UrateFeatures(x,3, 'mean utilization rate'),axis=1)
-        #
-        # predict_df['increaseUrateL6M'] = predict_df.apply(lambda x: self.urateFeaturesExtractor.UrateFeatures(x, 6, 'increase utilization rate'),axis=1)
-        #
-        # #2. categoricalFeatures下的部分特征还需要进一步合并处理
-        # # M0FreqL3M不需要参与bin 分箱，可以直接进行
-        # predict_df['M2FreqL3M_Bin'] = predict_df['M2FreqL3M'].apply(lambda x: int(x>=1))
-        # predict_df['maxDelqL1M_Bin'] = predict_df['maxDelqL1M'].apply(lambda x: MergeByCondition(x,['==0','==1','>=2']))
-        # predict_df['maxDelqL3M_Bin'] = predict_df['maxDelqL3M'].apply(lambda x: MergeByCondition(x,['==0','==1','>=2']))
-        #
-        # #2. 对于衍生特征进行分箱，用于后续WOE编码
-        # #2.1对于连续特征： 根据bin_dict来映射,保证能够满足badrate单调
-        # numericalFeatures_bin = []
-        # categoricalFeatures_bin = []
-        #
-        # modelFeatures = [i.replace('_Bin','').replace('_WOE','') for i in self.featuresInModel]
-        # for var in [f for f in self.numericalFeatures if f in modelFeatures]:
-        #     newBin = var + "_Bin"
-        #     print(newBin)
-        #     #bin = [i.values() for i in self.bin_dict if var in i][0][0]
-        #     bin = [i[var] for i in self.bin_dict if var in i][0]
-        #     predict_df[newBin] = predict_df[var].apply(lambda x: AssignBin(x, bin))
-        #     numericalFeatures_bin.append(newBin)
-        #
-        # #2.2 对于 categoricalFeatures下的部分特征 手动进行分箱合并
-        # # M0FreqL3M不需要手动参与bin分箱
-        #
-        # predict_df['M2FreqL3M_Bin'] = predict_df['M2FreqL3M'].apply(lambda x: int(x>=1))
-        # predict_df['maxDelqL1M_Bin'] = predict_df['maxDelqL1M'].apply(lambda x: MergeByCondition(x,['==0','==1','>=2']))
-        # predict_df['maxDelqL3M_Bin'] = predict_df['maxDelqL3M'].apply(lambda x: MergeByCondition(x,['==0','==1','>=2']))
-        # categoricalFeatures_bin = ['M2FreqL3M_Bin','maxDelqL1M_Bin','maxDelqL3M_Bin','M0FreqL3M']
-        #
-        # #进行分箱后的特征名称集合
-        # finalFeatures_bin = numericalFeatures_bin + categoricalFeatures_bin
-        #
-        # #3. 对于finFeatures_bin中的特征进行WOE编码
-        # for var in finalFeatures_bin:
-        #     var2 = var + "_WOE"
-        #     predict_df[var2] = predict_df[var].apply(lambda x: self.WOE_IV_dict[var2]['WOE'][x])
-        #
-        # return  predict_df[self.featuresInModel]
 
     def compute_woe(self, df, var):
         new_var = var + '_WOE'
@@ -133,7 +81,7 @@ class PredictionDataGenerator:
 
     def numerical_feature_encoding(self, df):
         print('numerical feature encoding:')
-        #对于连续变量，参照bin_dict 对于每个连续变量进行bin划分后 进行woe编码计算
+        #对于连续变量，参照预训练好的bin_dict分箱模型， 对于每个连续变量进行bin划分后 进行woe编码计算
         modelFeatures = [i.replace('_Bin','').replace('_WOE','') for i in self.featuresInModel]
         for var in [f for f in self.numericalFeatures if f in modelFeatures]:
             newBin = var + "_Bin"
@@ -147,8 +95,28 @@ class PredictionDataGenerator:
     def feature_transform(self, df):
         print('transform features:')
 
-    def woe_encoding(self, df):
+    def data_generate(self, predict_df):
 
-        self.categorical_feature_encoding()
+        self.categorical_feature_encoding(predict_df)
 
-        self.numerical_feature_encoding()
+        self.numerical_feature_encoding(predict_df)
+
+        print('woe encodered features before feature selection:')
+        print(predict_df.columns)
+
+        return  predict_df[self.featuresInModel]
+
+
+if __name__ == '__main__':
+
+    generator = PredictionDataGenerator()
+    data_df = pd.read_excel(ROOT_DIR + 'transformed_test.xlsx', encoding='utf-8')
+    label_data = data_df[['user_id', 'loan_status']]
+    train_WOE_data = generator.data_generate(data_df)
+
+    train_WOE_data = pd.concat([label_data, train_WOE_data], axis=1)
+
+    print(train_WOE_data.columns)
+
+    train_WOE_data.to_excel(FE_DIR + 'test_WOE_data.xlsx', index = None)
+

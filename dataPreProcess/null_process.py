@@ -5,7 +5,7 @@ import  numpy as np
 import  xgboost as xgb
 from  settings import  *
 from  sklearn.ensemble import  GradientBoostingRegressor
-from  .data_split import *
+from  dataPreProcess.data_split import *
 
 #存在空值情况的原始特征，需要进行空值插入
 '''
@@ -25,7 +25,7 @@ br_score
 #芝麻分的缺失值处理
 #尝试通过树模型来预测缺失值，相关性较强的其他变量作为该模型特征
 def zhimaScore_missingValue_ByModel(df):
-    numerical_df = df[numericalFeatures + ['user_id']]
+    numerical_df = df[FEATURE_DICT['numericalFeatures'] + ['user_id']]
     test_df = numerical_df[numerical_df['zhima_score'].isnull()]
     train_df = numerical_df[numerical_df['zhima_score'].notnull()]
 

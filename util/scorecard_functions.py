@@ -486,15 +486,6 @@ def KS(df, score, target):
     KS = all.apply(lambda x: x.badCumRate - x.goodCumRate, axis=1)
     return max(KS)
 
-def ks_auc_eval(result_df):
-
-    ks = KS(result_df, 'pred', 'label')
-    auc = roc_auc_score(result_df['label'], result_df['pred'])  #AUC = 0.73
-    #{'AUC': 0.83644931044825688, 'KS': 0.59816049348012412}
-    result = {}
-    result['ks'] = ks
-    result['auc'] = auc
-    return  result
 
 def loadFeatures(file):
 

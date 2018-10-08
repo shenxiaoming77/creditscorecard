@@ -5,6 +5,7 @@ from  settings import  *
 from  util.scorecard_functions import  *
 
 from  settings import  *
+from  settings import  FEATURE_DICT
 
 """
 对预处理后的特征进行分箱与WOE编码
@@ -174,7 +175,7 @@ class WOEEncoding:
         for var in self.numericalFeatures:
             max_bins = NUM_BINS
             print(var)
-            #先进行卡方分箱，将特征数据离散化，并且按照卡方合并的原理，将原始特征的bin数控制在num_bin范围以内
+            #先进行一次卡方分箱，将特征数据离散化，并且按照卡方合并的原理，将原始特征的bin数控制在num_bin范围以内
             bin = ChiMerge(self.train_data, var, LABEL, max_interval=max_bins, minBinPcnt= 0.05)
             print('chiMerge bin: ', bin)
             new_var = var + '_Bin'

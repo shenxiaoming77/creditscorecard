@@ -1,22 +1,16 @@
 import  pandas as pd
-import  statsmodels.api as sm
-import pickle
-import  matplotlib.pyplot as plt
-
-from  sklearn.linear_model import  LogisticRegression
-from  settings import  *
-from  util.scorecard_functions import ks_auc_eval
-from  util.scorecard_functions import Prob2Score
-
 from  sklearn.externals import  joblib
-from  featureEngineering.predict_data_generator import PredictionDataGenerator
+from  sklearn.metrics import  roc_auc_score
+from  settings import  *
+
+from  util.scorecard_functions import KS
+from  modeling.predict_data_generator import PredictionDataGenerator
 
 
 class LogisticRegressionPredictor:
 
     def __init__(self, platform):
         self.platform = platform
-        self.dataGenerator = PredictionDataGenerator()
         self.model = self.load_model(platform)
         print('load local model file, platfrom:', platform)
 
@@ -25,21 +19,26 @@ class LogisticRegressionPredictor:
         model = joblib.load(model_name)
         return  model
 
+    def ks_auc_eval(self, result_df):
+
+        ks = KS(result_df, 'pred', LABEL)
+        auc = roc_auc_score(result_df[LABEL], result_df['pred'])
+        result = {}
+        result['ks'] = ks
+        result['auc'] = auc
+        return  result
+
 
     def predict(self, predict_df):
 
-        X = self.dataGenerator.data_generate(predict_df)
-        print('generate predict data:')
+        X = predict_df
         print(X)
 
         result_df = pd.DataFrame()
-        if self.platform == 'statsmodels':
-            X['intercept'] = [1] * X.shape[0]
-            result_df['pred'] = self.model.predict(X)
-        else:
-            X['intercept'] = [1] * X.shape[0]
-            probas = self.model.predict_proba(X)[:, 1]
-            result_df['pred'] = probas
+
+        X['intercept'] = [1] * X.shape[0]
+        probas = self.model.predict_proba(X)[:, 1]
+        result_df['pred'] = probas
 
         return  result_df
 
@@ -47,21 +46,15 @@ class LogisticRegressionPredictor:
 
 if __name__ == '__main__':
 
-    #predictor = LogisticRegressionPredictor('statsmodels')
     predictor = LogisticRegressionPredictor('sklearn')
-    test_df = pd.read_csv(ROOT_DIR + 'testData.csv')
+    test_df = pd.read_excel(FE_DIR + 'test_WOE_data.xlsx')
     label = test_df[LABEL]
-    predict_df = test_df.drop(['CUST_ID', 'label'], axis = 1)
+    predict_df = test_df.drop(['user_id', LABEL], axis = 1)
 
-    pred = predictor.predict(predict_df)
-    print('predict result:')
-    print(pred)
+    result_df = predictor.predict(predict_df)
+    result_df[LABEL] = list(label)
 
-    result_df = pd.DataFrame()
-    result_df['pred'] = pred
-    result_df['label'] = label
-
-    ks_auc = ks_auc_eval(result_df)
+    ks_auc = predictor.ks_auc_eval(result_df)
     print(ks_auc)
 
     # BasePoint, PDO = 500,50
