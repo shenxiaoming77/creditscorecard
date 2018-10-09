@@ -594,26 +594,19 @@ def days(str1,str2):
 
 
 
-def job_level_combine_func(job_level):
-    if job_level == "主管":
-        return  "主任/主管/组长/初级管理"
-    elif job_level == "总监" or job_level == "总经理":
-        return "总监/总经理/高管"
-    elif job_level == "经理":
-        return  "经理/中级管理"
+def job_level_combine_func(job_level, d):
+    if job_level in d.keys():
+        return  d[job_level]
     else:
-        return  job_level
+        return job_level
 
-def network_len_combine_func(networkLen):
+
+def network_len_combine_func(networkLen, d):
     length = str(networkLen)
-    if length == '(3,6]':
-        return  '(0,6]'
-    elif length == '6':
-        return  '(0,6]'
-    elif length == '未查得':
-        return  'missing'
+    if length in d.keys():
+        return  d[length]
     else:
-        return  length
+        return length
 
 
 #判断该变量是否存在零坏样本或者零好样本的情况，即某个bin的badrate为0或者goodrate为0

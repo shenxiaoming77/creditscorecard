@@ -15,7 +15,7 @@ class LogisticRegressionPredictor:
         print('load local model file, platfrom:', platform)
 
     def load_model(self, platform):
-        model_name = 'LR-Model-' + platform + '.m'
+        model_name = ROOT_DIR + 'LR-Model-' + platform + '.m'
         model = joblib.load(model_name)
         return  model
 

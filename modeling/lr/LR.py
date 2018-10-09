@@ -39,21 +39,7 @@ class LogisticRegressionRunner:
         X['intercept'] = [1] * X.shape[0]
         y = self.y_train
 
-
-        if platform == 'statsmodels':
-            logit = sm.Logit(y, X)
-            logit_result = logit.fit()
-
-            result_df = pd.DataFrame()
-            result_df[LABEL] = self.y_train
-            result_df['pred'] = logit_result.predict(X)
-
-            print(result_df)
-
-            self.save_model(logit_result, 'LR-Model-statsmodels.m')
-
-        elif platform == 'sklearn':
-            clf = LogisticRegression(penalty='l1',  #正则化策略
+        clf = LogisticRegression(penalty='l1',  #正则化策略
                                      dual=False,
                                      tol=0.000001,   #迭代收敛阈值
                                      C=2.0,   #惩罚系数倒数
@@ -64,20 +50,14 @@ class LogisticRegressionRunner:
                                      verbose=0,
                                      n_jobs=-1)
 
-            logit_result = clf.fit(X, y)
-            probas = logit_result.predict_proba(X)[:, 1]
+        logit_result = clf.fit(X, y)
+        probas = logit_result.predict_proba(X)[:, 1]
 
-            result_df = pd.DataFrame()
-            result_df[LABEL] = self.y_train
-            result_df['pred'] = probas
+        result_df = pd.DataFrame()
+        result_df[LABEL] = self.y_train
+        result_df['pred'] = probas
 
-            print(result_df)
-
-            self.save_model(logit_result, 'LR-Model-sklearn.m')
-
-        else:
-            raise  RuntimeError('option for platform is invalid')
-
+        self.save_model(logit_result, ROOT_DIR + 'LR-Model-sklearn.m')
 
         return  result_df
 

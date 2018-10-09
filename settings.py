@@ -60,7 +60,7 @@ FEATURE_DICT = {
                      'm12_loan_offer_count',
                      'm12_repay_fail_count',
                      'm12_overdue_count',
-                     'register_apply_date_interval',
+                     'register_apply_date_diff',
                      'm12_repay_remind_count'
                 ],
 #类别型变量
@@ -80,9 +80,7 @@ FEATURE_DICT = {
                        'br_score_classification',
                        'user_age_classification',
                        'identity_province_classification',
-
                        'seemingly_abnormity_application'
-
                     ],
 
 'toRemoveFeatures' :
@@ -127,6 +125,41 @@ LABEL_ENCODE_DICT = {
                                       '上旬':1,
                                       '中旬':2,
                                       '下旬':3,
-                                     }
+                                     },
+
+
 }
 
+FEATURE_TRANSFORM_DICT = {
+        "job_level":{
+         '主管' :'主任/主管/组长/初级管理',
+         '总经理' :'总监/总经理/高管',
+         '总监':'总监/总经理/高管',
+         '经理':'经理/中级管理',
+          '实习生':'学生',
+         '司机' :'普通员工',
+         '服务员':'普通员工',
+         '厨师':'普通员工',
+         '保安':'普通员工',
+         '一般工人':'普通员工',
+         '技术工人':'普通员工',
+         '行政/人力资源' :'行政/人力资源/财会人员/助理',
+         '财会人员':'行政/人力资源/财会人员/助理',
+         '助理':'行政/人力资源/财会人员/助理',
+         '专业技术人员':'专业技术人员/设计师/工程师',
+         '设计师':'专业技术人员/设计师/工程师',
+         '工程师':'专业技术人员/设计师/工程师',
+         '医护人员': '医护人员/教师/军人/科级以上',
+         '科级以上': '医护人员/教师/军人/科级以上',
+         '教师': '医护人员/教师/军人/科级以上',
+         '军人': '医护人员/教师/军人/科级以上',
+         '一般科员' :'一般科员/专员',
+         '专员' :'一般科员/专员',
+
+    },
+    'network_len':{
+        '(3,6]':'(0,6]',
+        '6':'(0,6]',
+        '未查得':'missing'
+    }
+}

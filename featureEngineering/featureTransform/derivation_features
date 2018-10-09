@@ -1,8 +1,12 @@
-register_apply_date_interval
-seemingly_abnormity_application
+单变量衍生：
 identity_city_classification
 phone_city_classification
 identity_province_classification
 user_age_classification
 zhima_score_classification
 br_score_classification
+
+多变量衍生:
+register_apply_date_diff
+seemingly_abnormity_application
+

@@ -41,7 +41,16 @@ class WOEEncoding:
         self.save()
 
 
-    def not_monotone_feature_process(self, features):
+        '''
+         badrate不单调并且需要卡方分箱合并的类别变量:
+        'auth_level': == 0, == 1, == 2, >= 3
+        'network_len': ==0, ==1, >=2
+        'identity_city_classification': ==0, ==1, >=2 and <= 3, ==4, >=5
+        'phone_city_classification':==0, >= 1 and <=2, ==3, ==4, >=5
+        'br_score_classification':==0, >=1 and <= 2, ==3
+        'user_age_classification':==0, ==1, >=2
+        '''
+    def not_monotone_feature_process(self):
         self.train_data['auth_level_Bin'] = self.train_data['auth_level']\
             .apply(lambda x: MergeByCondition(x, ['var == 0','var == 1', 'var == 2', 'var >= 3']))
         print(self.train_data.groupby('auth_level_Bin')[LABEL].mean())
@@ -84,30 +93,13 @@ class WOEEncoding:
 
     def categorical_feature_encoding(self):
 
-        not_monotone = []
-
-        #先对类别变量中badrate不单调的特征进行合并并且计算WOE值
-        for var in self.categoricalFeatures:
-            if not BadRateMonotone(self.train_data, var, target=LABEL):
-                not_monotone.append(var)
+        not_monotone = ['auth_level','network_len','identity_city_classification',
+                        'phone_city_classification','br_score_classification',
+                        'user_age_classification',]
 
 
-        #无序且高离散化变量，不需要进一步分箱合并，直接基于每个bin的badrate进行编码
-        unordered_categorical_variable = ['job_level', 'phone_province','identity_province','occupation']
-        for var in unordered_categorical_variable:
-            not_monotone.remove(var)
-
-        '''
-         badrate不单调并且需要卡方分箱合并的类别变量:
-        'auth_level': == 0, == 1, == 2, >= 3
-        'network_len': ==0, ==1, >=2
-        'identity_city_classification': ==0, ==1, >=2 and <= 3, ==4, >=5
-        'phone_city_classification':==0, >= 1 and <=2, ==3, ==4, >=5
-        'br_score_classification':==0, >=1 and <= 2, ==3
-        'user_age_classification':==0, ==1, >=2
-        '''
         #1. 针对badrate不单调的类别特征进行处理
-        self.not_monotone_feature_process(not_monotone)
+        self.not_monotone_feature_process()
 
         #2. 对于其他类别变量，需要进一步检测每个bin是否存在零坏样本的情况，如果存在则需要进行merge
         for var in self.categoricalFeatures:

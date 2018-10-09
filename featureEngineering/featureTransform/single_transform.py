@@ -12,13 +12,16 @@ from  util.scorecard_functions import *
 '经理'---> '经理/中级管理',
 '''
 def job_level_combine(df):
-    df['job_level'] = df['job_level'].apply(lambda x : job_level_combine_func(x))
-    print(set(df['job_level']))
-    print(len(set(df['job_level'])))
+    transform_dict = FEATURE_TRANSFORM_DICT['job_level']
+    df['job_level'] = df['job_level'].apply(lambda x : job_level_combine_func(x, transform_dict))
+
+
 
 #network_len中的几个时间段存在重合，进行合并
 def network_len_combine(df):
-    df['network_len'] = df['network_len'].apply(lambda  x : network_len_combine_func(x))
+    transform_dict = FEATURE_TRANSFORM_DICT['network_len']
+    df['network_len'] = df['network_len'].apply(lambda  x : network_len_combine_func(x, transform_dict))
+
 
 if __name__ == '__main__':
     user_info_df = pd.read_excel(ROOT_DIR + 'preProcessed_user_info.xlsx', encoding='utf-8')

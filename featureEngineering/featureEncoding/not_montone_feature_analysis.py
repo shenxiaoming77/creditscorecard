@@ -87,12 +87,15 @@ job_level, phone_province,identity_province,occupation
 'user_age_classification':==0, ==1, >=2
 '''
 
+#无序且高离散化变量，不需要进一步分箱合并，直接基于每个bin的badrate进行编码
+unordered_categorical_variable = ['job_level', 'phone_province','identity_province','occupation']
+
 #获取所有badrate不单调的类别变量，逐一分析是否需要进行卡方分箱合并
 for var in categoricalFeatures:
     print(var)
     if not BadRateMonotone(train_data, var, target=LABEL):
+        if var not in unordered_categorical_variable:
             not_monotone_list.append(var)
-
 print(not_monotone_list)
 
 
