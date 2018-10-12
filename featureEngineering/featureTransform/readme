@@ -4,5 +4,5 @@ feature_transform_main: 执行类，进行单变量的值域转换，以及特�
 3. 多变量之间的交叉特征衍生
 
 single_transform: 主要是一些单变量的值域转换
-derivation： 单变量特征衍生以及多变量交叉衍生
-
+feature_derivation： 单变量特征衍生以及多变量之间的人工组合
+feature_cross: 类别变量两两之间进行笛卡尔积运算，得到交叉特征

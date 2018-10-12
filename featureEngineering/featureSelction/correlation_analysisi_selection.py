@@ -48,12 +48,11 @@ class  CorrelationAnalysisSelection:
 
         print('WOE FEATURES:')
         print(WOE_IV_dict.keys())
-        return
 
         '''
         1.先进行单变量分析：按IV值进行排序,过滤掉IV值过低的特征
         '''
-        high_IV = [(var, value['IV']) for var, value in WOE_IV_dict.items() if value['IV'] >= 0.01]
+        high_IV = [(var, value['IV']) for var, value in WOE_IV_dict.items() if  value['IV'] <1.2 and value['IV'] >= 0.2]
         #按IV值进行排序
         high_IV_sorted = sorted(high_IV, key = lambda tuple : tuple[1], reverse = True)
 
@@ -103,6 +102,7 @@ class  CorrelationAnalysisSelection:
         print(X)
 
         VIF_list = [variance_inflation_factor(X, i) for i in range(X.shape[1])]
+        print('max VIF:')
         print (max(VIF_list))
         # 最大的VIF是 3.429，小于10，因此这一步认为没有多重共线性
         multi_analysis = single_analysis_vars

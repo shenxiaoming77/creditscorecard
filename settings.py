@@ -61,15 +61,17 @@ FEATURE_DICT = {
                      'm12_repay_fail_count',
                      'm12_overdue_count',
                      'register_apply_date_diff',
-                     'm12_repay_remind_count'
+                     'm12_repay_remind_count',
+
+                     'job_level',
+                       'phone_province',
+                       'identity_province',
+                       'occupation',
                 ],
 #类别型变量
 'categoricalFeatures' :
                     ['gender',
-                       'job_level',
-                       'phone_province',
-                       'identity_province',
-                       'occupation',
+
                        'registerDate_xunYue',
                        'applyDate_xunYue',
                        'auth_level',

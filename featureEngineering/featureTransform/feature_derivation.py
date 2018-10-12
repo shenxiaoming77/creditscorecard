@@ -8,10 +8,9 @@ from  util.scorecard_functions import *
 
 
 '''
-cross feature:
-register_apply_date_interval
+register_apply_date_diff
 '''
-def register_apply_date_interval(train_df, derivation_df):
+def register_apply_date_diff(train_df, derivation_df):
     length = len(train_df['apply_date'])
     apply_date = train_df['apply_date']
     register_date = train_df['register_date']
@@ -22,11 +21,11 @@ def register_apply_date_interval(train_df, derivation_df):
         date2 = apply_date[i]
         date_interval.append(days(str(date2), str(date1)))
 
-    derivation_df['register_apply_date_interval'] = date_interval
+    derivation_df['register_apply_date_diff'] = date_interval
 
 
 '''
-cross feature:
+
 以下的特定的job_level岗位在凌晨0点到6之前申请贷款，坏账率呈现相对较高的趋势，这类人在凌晨的apply
 看成是疑似异常贷款申请：seemingly_abnormity_application
 

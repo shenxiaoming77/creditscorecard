@@ -188,8 +188,14 @@ from  util.scorecard_functions import *
 with open(ROOT_DIR + 'featureEngineering/featuresInModel.pkl', 'rb') as f:
     featuresInModel = pickle.load(f)
 
-df1 = pd.read_excel('D:/conf_test/train_WOE_data1.xlsx')[featuresInModel + ['user_id', LABEL]]
-df2 = pd.read_excel('D:/conf_test/train_WOE_data2.xlsx')[featuresInModel + ['user_id', LABEL]]
+df = pd.read_excel('D:/conf_test/train_WOE_data1.xlsx')[featuresInModel + ['user_id', LABEL]]
+#df2 = pd.read_excel('D:/conf_test/train_WOE_data2.xlsx')[featuresInModel + ['user_id', LABEL]]
 
 
+regroup = BinBadRate(df, 'job_level', LABEL)[1]
+regroup_bad = regroup.sort_values(by  = 'bad_rate')
+regroup_good = regroup.sort_values(by='bad_rate',ascending=False)
 
+print(regroup_bad)
+print('****************')
+print(regroup_good)

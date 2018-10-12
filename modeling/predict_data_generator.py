@@ -35,6 +35,7 @@ class PredictionDataGenerator:
 
     def compute_woe(self, df, var):
         new_var = var + '_WOE'
+        print(new_var)
         df[new_var] = df[var].map(lambda x : self.WOE_IV_dict[new_var]['WOE'][x])
 
     def categorical_feature_encoding(self, df):
@@ -66,12 +67,12 @@ class PredictionDataGenerator:
         for key, value in self.badrate0_merged_dict.items():
             var = key
             merged_dict = value
-            df[var] = df[var].map(lambda x : merged_dict[x])
+            df[var] = df[var].map(lambda x : badrate0_dict_map(x, merged_dict))
 
         for key, value in self.goodrate0_merged_dict.items():
             var = key
             merged_dict = value
-            df[var] = df[var].map(lambda x : merged_dict[x])
+            df[var] = df[var].map(lambda x : badrate0_dict_map(x, merged_dict))
 
         #3.最后对于类别变量进行woe编码计算
         for var in self.categoricalFeatures:
@@ -80,10 +81,11 @@ class PredictionDataGenerator:
 
 
     def numerical_feature_encoding(self, df):
+        crossFeatures = pd.read_excel(FE_DIR + 'cross_features.xlsx')['feature']
         print('numerical feature encoding:')
         #对于连续变量，参照预训练好的bin_dict分箱模型， 对于每个连续变量进行bin划分后 进行woe编码计算
         modelFeatures = [i.replace('_Bin','').replace('_WOE','') for i in self.featuresInModel]
-        for var in [f for f in self.numericalFeatures if f in modelFeatures]:
+        for var in [f for f in self.numericalFeatures + list(crossFeatures) if f in modelFeatures]:
             newBin = var + "_Bin"
             print(newBin)
             #bin = [i.values() for i in self.bin_dict if var in i][0][0]

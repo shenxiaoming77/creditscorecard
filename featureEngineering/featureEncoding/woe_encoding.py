@@ -15,6 +15,7 @@ class WOEEncoding:
     def __init__(self, file):
         self.categoricalFeatures = FEATURE_DICT['categoricalFeatures']
         self.numericalFeatures = FEATURE_DICT['numericalFeatures']
+        self.crossFeatures = pd.read_excel(FE_DIR + 'cross_features.xlsx')['feature']
         self.WOE_IV_dict = {}
         self.toRemove_list = FEATURE_DICT['toRemoveFeatures']
         self.bin_dict = []
@@ -106,7 +107,7 @@ class WOEEncoding:
             if var not in not_monotone:
                 if existing_badrate0(self.train_data, var, LABEL, 'bad'):
                     merged_dict = MergeBad0(self.train_data, var, LABEL, direction='bad')
-                    self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
+                    self.train_data[var] = self.train_data[var].apply(lambda x : merged_dict[x])
                     self.badrate0_merged_dict[var] = merged_dict
 
         print('badrate0 merged dict:')
@@ -117,7 +118,7 @@ class WOEEncoding:
             if var not in not_monotone:
                 if existing_badrate0(self.train_data, var, LABEL, 'good'):
                     merged_dict = MergeBad0(self.train_data, var, LABEL, direction='good')
-                    self.train_data[var] = self.train_data[var].map(lambda x : merged_dict[x])
+                    self.train_data[var] = self.train_data[var].apply(lambda x : merged_dict[x])
                     self.goodrate0_merged_dict[var] = merged_dict
 
         print('goodrate0 merged dict:')
@@ -164,7 +165,7 @@ class WOEEncoding:
     '''
     def numerical_feature_encoding(self):
 
-        for var in self.numericalFeatures:
+        for var in self.numericalFeatures + list(self.crossFeatures):
             max_bins = NUM_BINS
             print(var)
             #先进行一次卡方分箱，将特征数据离散化，并且按照卡方合并的原理，将原始特征的bin数控制在num_bin范围以内
@@ -183,6 +184,8 @@ class WOEEncoding:
             #满足单调性后计算WOE值
             self.compute_woe(new_var)
             self.bin_dict.append({var: bin})
+
+
 
     def save(self):
 

@@ -433,6 +433,13 @@ def Prob2Score(prob, basePoint, PDO):
     return int(basePoint+PDO/np.log(2)*(-y))
 
 
+def badrate0_dict_map(x, map_dict):
+    if x not in map_dict.keys():
+        print(x)
+        return 'Bin 0'
+    else:
+        return  map_dict[x]
+
 ### 计算KS值
 def KS(df, score, target):
     '''
