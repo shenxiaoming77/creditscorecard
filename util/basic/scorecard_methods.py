@@ -133,6 +133,7 @@ def cutoff_bin(user_df, col, target, minBinPcnt=0):
         user_df[newVar] = user_df[col].map(lambda x: AssignBin(x, cutOff, special_attribute=[]))
         var_bin_list.append(newVar)
     else:
+        print('有特殊值-1')
         max_interval = 5
         # 如果有－1，则除去－1后，其他取值参与分箱
         cutOff = ChiMerge(user_df, col, target, max_interval=max_interval, special_attribute=[-1],
@@ -143,9 +144,9 @@ def cutoff_bin(user_df, col, target, minBinPcnt=0):
         monotone = BadRateMonotone(user_df, col + '_Bin', target)
         while (not monotone):
             max_interval -= 1
+            print('max_interval = ', max_interval)
             # 如果有－1，－1的bad rate不参与单调性检验
             cutOff = ChiMerge(user_df, col, target, max_interval=max_interval, special_attribute=[-1], minBinPcnt=minBinPcnt)
-            print('max_interval = ', max_interval)
             print('cutOff:')
             print(cutOff)
             user_df[col + '_Bin'] = user_df[col].map(lambda x: AssignBin(x, cutOff, special_attribute=[-1]))

@@ -80,6 +80,7 @@ def ChiMerge(df, col, target, max_interval=5,special_attribute=[],minBinPcnt=0):
     '''
     colLevels = sorted(list(set(df[col])))
     N_distinct = len(colLevels)
+    print('N_distinct len: ', N_distinct)
     if N_distinct <= max_interval:  #如果原始属性的取值个数低于max_interval，不执行这段函数
         print("The number of original levels for {} is less than or equal to max intervals".format(col))
         return colLevels[:-1]
@@ -131,6 +132,8 @@ def ChiMerge(df, col, target, max_interval=5,special_attribute=[],minBinPcnt=0):
         df2['temp_Bin'] = groupedvalues
         (binBadRate,regroup) = BinBadRate(df2, 'temp_Bin', target)
         print('检查是否有分箱没有好或者坏样本，如果有，需要跟相邻的分箱进行合并:')
+
+        print(cutOffPoints)
         print('binBadRate:')
         print(binBadRate)
         print('regroup:')
@@ -143,13 +146,17 @@ def ChiMerge(df, col, target, max_interval=5,special_attribute=[],minBinPcnt=0):
             bin=indexForBad01[0]
             # 如果是最后一箱，则需要和上一个箱进行合并，也就意味着分裂点cutOffPoints中的最后一个需要移除
             if bin == max(regroup.temp_Bin):
+                print('当前cutoffpoints：')
+                print(cutOffPoints)
                 cutOffPoints = cutOffPoints[:-1]
-                print('最后一箱合并到前面一箱：')
+                print('最后一箱合并到前面一箱之后的cutoffpoints ：')
                 print(cutOffPoints)
             # 如果是第一箱，则需要和下一个箱进行合并，也就意味着分裂点cutOffPoints中的第一个需要移除
             elif bin == min(regroup.temp_Bin):
+                print('当前cutoffpoints：')
+                print(cutOffPoints)
                 cutOffPoints = cutOffPoints[1:]
-                print('第一箱合并到第二箱：')
+                print('第一箱合并到第二箱之后的cutoffpoints ：')
                 print(cutOffPoints)
             # 如果是中间的某一箱，则需要和前后中的一个箱进行合并，依据是较小的卡方值
             else:
@@ -171,7 +178,10 @@ def ChiMerge(df, col, target, max_interval=5,special_attribute=[],minBinPcnt=0):
                 print('中间分箱合并：')
                 print(cutOffPoints)
             # 完成合并之后，需要再次计算新的分箱准则下，每箱是否同时包含好坏样本
-            groupedvalues = df2['temp'].apply(lambda x: AssignBin(x, cutOffPoints))
+            print('start to assign bin, len of special_attribute:', len(special_attribute))
+            print('cutOffPoints:')
+            print(cutOffPoints)
+            groupedvalues = df2['temp'].apply(lambda x: AssignBin(x, cutOffPoints,special_attribute=[]))
             df2['temp_Bin'] = groupedvalues
             (binBadRate, regroup) = BinBadRate(df2, 'temp_Bin', target)
             [minBadRate, maxBadRate] = [min(binBadRate.values()), max(binBadRate.values())]
@@ -280,14 +290,15 @@ def AssignBin(x, cutOffPoints,special_attribute=[]):
     :return: 分箱后的对应的第几个箱，从0开始
     for example, if cutOffPoints = [10,20,30], if x = 7, return Bin 0. If x = 35, return Bin 3
     '''
+
     numBin = len(cutOffPoints) + 1 + len(special_attribute)
     if x in special_attribute:
         i = special_attribute.index(x)+1
         return 'Bin {}'.format(0-i)
     if x<=cutOffPoints[0]:
         return 'Bin 0'
-    elif x > cutOffPoints[-1]:
-        return 'Bin {}'.format(numBin-1)
+    elif x > cutOffPoints[-1]:  #special_attribute存在，导致
+        return 'Bin {}'.format(numBin - 1)
     else:
         for i in range(0,numBin-1):
             if cutOffPoints[i] < x <=  cutOffPoints[i+1]:

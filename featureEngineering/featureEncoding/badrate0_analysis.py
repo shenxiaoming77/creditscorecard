@@ -17,14 +17,14 @@ numericalFeatures = FEATURE_DICT['numericalFeatures']
 df = pd.read_excel(ROOT_DIR + 'transformed_train.xlsx')
 
 
-regroup = BinBadRate(df, 'job_level', LABEL)[1]
+regroup = BinBadRate(df, 'auth_level', LABEL)[1]
 regroup_bad = regroup.sort_values(by  = 'bad_rate')
 regroup_good = regroup.sort_values(by='bad_rate',ascending=False)
 
 print(regroup_bad)
 print('****************')
-print(MergeBad0(df, 'job_level', LABEL, 'bad'))
+print(MergeBad0(df, 'auth_level', LABEL, 'bad'))
 print('************************************************')
 print(regroup_good)
 print('****************')
-print(MergeBad0(df, 'job_level', LABEL, 'good'))
+print(MergeBad0(df, 'auth_level', LABEL, 'good'))

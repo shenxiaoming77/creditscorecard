@@ -1,7 +1,6 @@
 #coding=utf-8
 
 import  pandas as pd
-import  numpy as np
 
 from  util.basic.scorecard_functions import *
 from  util.basic.scorecard_methods import *
@@ -24,4 +23,6 @@ merge_data = merge_data[merge_data['is_overdue']>=0]
 merge_data.fillna(-1, inplace=True)
 #print(merge_data.columns)
 target = 'is_overdue'
+print('app0273 values:')
+print(set(merge_data['app0273']))
 dict_temp = function_binning(merge_data, var, target, method='chisq')

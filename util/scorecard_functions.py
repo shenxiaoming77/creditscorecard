@@ -397,7 +397,8 @@ def BadRateMonotone(df, sortByVar, target,special_attribute = []):
 def MergeBad0(df,col,target, direction = 'bad'):
     '''
      :param df: 包含检验0％或者100%坏样本率
-     :param col: 分箱后的变量或者类别型变量。检验其中是否有一组或者多组没有坏样本或者没有好样本。如果是，则需要进行合并
+     :param col: 分箱后的变量或者类别型变量。检验其中是否有一组或者多组没有坏样本或者没有好样本。
+                 如果是，则需要进行合并
      :param target: 目标变量，0、1表示好、坏
      :return: 合并方案，使得每个组里同时包含好坏样本
      '''
@@ -410,6 +411,7 @@ def MergeBad0(df,col,target, direction = 'bad'):
         regroup = regroup.sort_values(by='bad_rate',ascending=False)
     regroup.index = range(regroup.shape[0])
     col_regroup = [[i] for i in regroup[col]]
+
     del_index = []
     for i in range(regroup.shape[0]-1):
         col_regroup[i+1] = col_regroup[i] + col_regroup[i+1]
