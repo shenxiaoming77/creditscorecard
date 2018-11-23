@@ -184,6 +184,11 @@ def ChiMerge(df, col, target, max_interval=5,special_attribute=[],minBinPcnt=0):
             groupedvalues = df2['temp'].apply(lambda x: AssignBin(x, cutOffPoints,special_attribute=[]))
             df2['temp_Bin'] = groupedvalues
             (binBadRate, regroup) = BinBadRate(df2, 'temp_Bin', target)
+            print('分箱合并后情况：')
+            print('badrate:')
+            print(binBadRate)
+            print('regroup:')
+            print(regroup)
             [minBadRate, maxBadRate] = [min(binBadRate.values()), max(binBadRate.values())]
         # 需要检查分箱后的最小占比
         if minBinPcnt > 0:
@@ -342,10 +347,14 @@ def BadRateMonotone(df, sortByVar, target,special_attribute = []):
     :param special_attribute: 不参与检验的特殊值
     :return: 坏样本率单调与否
     '''
+    print('单调性检验, special attribute：')
+    print(special_attribute)
     df2 = df.loc[~df[sortByVar].isin(special_attribute)]
     if len(set(df2[sortByVar])) <= 2:
         return True
     regroup = BinBadRate(df2, sortByVar, target)[1]
+    print('regroup:')
+    print(regroup)
     combined = zip(regroup['total'],regroup['bad'])
     badRate = [x[1]*1.0/x[0] for x in combined]
     badRateNotMonotone = [badRate[i]<badRate[i+1] and badRate[i] < badRate[i-1] or badRate[i]>badRate[i+1] and badRate[i] > badRate[i-1]

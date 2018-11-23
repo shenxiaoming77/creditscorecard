@@ -147,8 +147,6 @@ def cutoff_bin(user_df, col, target, minBinPcnt=0):
             print('max_interval = ', max_interval)
             # 如果有－1，－1的bad rate不参与单调性检验
             cutOff = ChiMerge(user_df, col, target, max_interval=max_interval, special_attribute=[-1], minBinPcnt=minBinPcnt)
-            print('cutOff:')
-            print(cutOff)
             user_df[col + '_Bin'] = user_df[col].map(lambda x: AssignBin(x, cutOff, special_attribute=[-1]))
             if max_interval == 3:
                 # 当分箱数为2时，必然单调

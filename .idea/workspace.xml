@@ -12,9 +12,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/creditscorecard$v2_imei_feature_analysis.coverage" NAME="v2_imei_feature_analysis Coverage Results" MODIFIED="1542703838792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util/jiguang_test" />
     <SUITE FILE_PATH="coverage/creditscored_dev$v2_imei_feature_analysis.coverage" NAME="v2_imei_feature_analysis Coverage Results" MODIFIED="1542728636439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util/jiguang_test" />
     <SUITE FILE_PATH="coverage/creditscored_dev$scorecard_functions.coverage" NAME="scorecard_functions Coverage Results" MODIFIED="1542724215783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util/basic" />
+    <SUITE FILE_PATH="coverage/creditscorecard$v2_imei_feature_analysis.coverage" NAME="v2_imei_feature_analysis Coverage Results" MODIFIED="1542763887846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util/jiguang_test" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -24,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="v2_imei_feature_analysis.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="v2_imei_feature_analysis.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/util/jiguang_test/v2_imei_feature_analysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="104">
-              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="620">
+              <caret line="27" column="49" selection-start-line="27" selection-start-column="49" selection-end-line="27" selection-end-column="49" />
               <folding>
                 <element signature="e#15#35#0" expanded="true" />
               </folding>
@@ -36,20 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scorecard_functions.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="scorecard_functions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/util/basic/scorecard_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="284" column="52" selection-start-line="284" selection-start-column="52" selection-end-line="284" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="scorecard_functions.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/util/scorecard_functions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="91">
-              <caret line="325" column="58" selection-start-line="325" selection-start-column="41" selection-end-line="325" selection-end-column="58" />
+            <state relative-caret-position="144">
+              <caret line="136" column="28" lean-forward="true" selection-start-line="136" selection-start-column="28" selection-end-line="136" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -57,8 +48,8 @@
       <file leaf-file-name="scorecard_methods.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/util/basic/scorecard_methods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="87">
-              <caret line="148" column="25" selection-start-line="148" selection-start-column="25" selection-end-line="148" selection-end-column="25" />
+            <state relative-caret-position="573">
+              <caret line="154" column="69" lean-forward="true" selection-start-line="154" selection-start-column="69" selection-end-line="154" selection-end-column="69" />
             </state>
           </provider>
         </entry>
@@ -116,23 +107,23 @@
         <subPane>
           <expand>
             <path>
-              <item name="creditscored_dev" type="b2602c69:ProjectViewProjectNode" />
-              <item name="creditscored_dev" type="462c0819:PsiDirectoryNode" />
+              <item name="creditscorecard" type="b2602c69:ProjectViewProjectNode" />
+              <item name="creditscorecard" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="creditscored_dev" type="b2602c69:ProjectViewProjectNode" />
-              <item name="creditscored_dev" type="462c0819:PsiDirectoryNode" />
+              <item name="creditscorecard" type="b2602c69:ProjectViewProjectNode" />
+              <item name="creditscorecard" type="462c0819:PsiDirectoryNode" />
               <item name="util" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="creditscored_dev" type="b2602c69:ProjectViewProjectNode" />
-              <item name="creditscored_dev" type="462c0819:PsiDirectoryNode" />
+              <item name="creditscorecard" type="b2602c69:ProjectViewProjectNode" />
+              <item name="creditscorecard" type="462c0819:PsiDirectoryNode" />
               <item name="util" type="462c0819:PsiDirectoryNode" />
               <item name="basic" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="creditscored_dev" type="b2602c69:ProjectViewProjectNode" />
-              <item name="creditscored_dev" type="462c0819:PsiDirectoryNode" />
+              <item name="creditscorecard" type="b2602c69:ProjectViewProjectNode" />
+              <item name="creditscorecard" type="462c0819:PsiDirectoryNode" />
               <item name="util" type="462c0819:PsiDirectoryNode" />
               <item name="jiguang_test" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -153,7 +144,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
-    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -177,6 +168,25 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.v2_imei_feature_analysis">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="creditscorecard" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="derivation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="creditscorecard" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -273,25 +283,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/util/jiguang_test/v2_imei_feature_analysis.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <module name="creditscorecard" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -396,7 +387,7 @@
     </recent_temporary>
   </component>
   <component name="SvnConfiguration" cleanupOnStartRun="true">
-    <configuration>C:\Users\xm\AppData\Roaming\Subversion</configuration>
+    <configuration>C:\Users\Administrator\AppData\Roaming\Subversion</configuration>
     <supportedVersion>125</supportedVersion>
   </component>
   <component name="TaskManager">
@@ -410,7 +401,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-4" y="-4" width="1688" height="929" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -418,10 +409,10 @@
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="8" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49926794" visible="true" weight="0.24801272" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49926794" weight="0.4347826" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1522694" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15178572" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -433,9 +424,9 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Changes" order="7" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -458,6 +449,37 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/util/jiguang_test/v2_imei_feature_analysis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#15#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/scorecard_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8640">
+          <caret line="325" column="58" selection-start-line="325" selection-start-column="41" selection-end-line="325" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/basic/scorecard_methods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3537">
+          <caret line="148" column="25" selection-start-line="148" selection-start-column="25" selection-end-line="148" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/basic/scorecard_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7641">
+          <caret line="284" column="52" selection-start-line="284" selection-start-column="52" selection-end-line="284" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/util/jiguang_test/v2_imei_feature_analysis.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
@@ -704,34 +726,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/basic/scorecard_methods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="148" column="25" selection-start-line="148" selection-start-column="25" selection-end-line="148" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/util/scorecard_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="91">
+        <state relative-caret-position="-962">
           <caret line="325" column="58" selection-start-line="325" selection-start-column="41" selection-end-line="325" selection-end-column="58" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/jiguang_test/v2_imei_feature_analysis.py">
+    <entry file="file://$PROJECT_DIR$/util/basic/scorecard_methods.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="e#15#35#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="573">
+          <caret line="154" column="69" lean-forward="true" selection-start-line="154" selection-start-column="69" selection-end-line="154" selection-end-column="69" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/util/basic/scorecard_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="284" column="52" selection-start-line="284" selection-start-column="52" selection-end-line="284" selection-end-column="52" />
+        <state relative-caret-position="144">
+          <caret line="136" column="28" lean-forward="true" selection-start-line="136" selection-start-column="28" selection-end-line="136" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/jiguang_test/v2_imei_feature_analysis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="620">
+          <caret line="27" column="49" selection-start-line="27" selection-start-column="49" selection-end-line="27" selection-end-column="49" />
+          <folding>
+            <element signature="e#15#35#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
